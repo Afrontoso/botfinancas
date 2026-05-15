@@ -738,7 +738,7 @@ DEFINIÇÃO DE PRONTO:
 
 ---
 
-## [*] T-009: GET /api/health + servidor mínimo rodando
+## [x] T-009: GET /api/health + servidor mínimo rodando
 
 | Campo | Valor |
 |---|---|
@@ -795,7 +795,7 @@ DEFINIÇÃO DE PRONTO:
 
 ---
 
-## [*] T-010: src/lib/prisma.ts + src/lib/logger.ts
+## [x] T-010: src/lib/prisma.ts + src/lib/logger.ts
 
 | Campo | Valor |
 |---|---|
@@ -862,7 +862,7 @@ DEFINIÇÃO DE PRONTO:
 
 ---
 
-## [*] T-011: src/processor/stub.ts
+## [x] T-011: src/processor/stub.ts
 
 | Campo | Valor |
 |---|---|
@@ -918,7 +918,7 @@ DEFINIÇÃO DE PRONTO:
 
 ---
 
-## [ ] T-012: TDD-Test — src/lib/env.ts (testes falhando)
+## [x] T-012: TDD-Test — src/lib/env.ts (testes falhando)
 
 | Campo | Valor |
 |---|---|
@@ -983,7 +983,7 @@ DEFINIÇÃO DE PRONTO:
 
 ---
 
-## [ ] T-013: TDD-Impl — src/lib/env.ts
+## [x] T-013: TDD-Impl — src/lib/env.ts
 
 | Campo | Valor |
 |---|---|
@@ -1051,7 +1051,7 @@ DEFINIÇÃO DE PRONTO:
 
 ---
 
-## [ ] T-014: TDD-Test — src/webhook/auth.ts (testes falhando)
+## [x] T-014: TDD-Test — src/webhook/auth.ts (testes falhando)
 
 | Campo | Valor |
 |---|---|
@@ -1113,7 +1113,7 @@ DEFINIÇÃO DE PRONTO:
 
 ---
 
-## [ ] T-015: TDD-Impl — src/webhook/auth.ts
+## [x] T-015: TDD-Impl — src/webhook/auth.ts
 
 | Campo | Valor |
 |---|---|
@@ -1173,7 +1173,7 @@ DEFINIÇÃO DE PRONTO:
 
 ---
 
-## [ ] T-016: TDD-Test — src/webhook/telegram-payload.ts (testes falhando)
+## [x] T-016: TDD-Test — src/webhook/telegram-payload.ts (testes falhando)
 
 | Campo | Valor |
 |---|---|
@@ -1231,7 +1231,7 @@ DEFINIÇÃO DE PRONTO:
 
 ---
 
-## [ ] T-017: TDD-Impl — src/webhook/telegram-payload.ts
+## [x] T-017: TDD-Impl — src/webhook/telegram-payload.ts
 
 | Campo | Valor |
 |---|---|
@@ -1286,7 +1286,7 @@ DEFINIÇÃO DE PRONTO: Reporte arquivo criado e output green. NÃO faça commit.
 
 ---
 
-## [ ] T-018: TDD-Test — src/webhook/normalize.ts (testes falhando)
+## [x] T-018: TDD-Test — src/webhook/normalize.ts (testes falhando)
 
 | Campo | Valor |
 |---|---|
@@ -1337,7 +1337,7 @@ DEFINIÇÃO DE PRONTO: Reporte 8 testes e output red. NÃO faça commit. Pare.
 
 ---
 
-## [ ] T-019: TDD-Impl — src/webhook/normalize.ts
+## [x] T-019: TDD-Impl — src/webhook/normalize.ts
 
 | Campo | Valor |
 |---|---|
@@ -1387,7 +1387,7 @@ DEFINIÇÃO DE PRONTO: Reporte arquivo e output green. NÃO faça commit. Pare.
 
 ---
 
-## [ ] T-020: TDD-Test — src/webhook/reply.ts (testes falhando)
+## [x] T-020: TDD-Test — src/webhook/reply.ts (testes falhando)
 
 | Campo | Valor |
 |---|---|
@@ -1443,7 +1443,7 @@ DEFINIÇÃO DE PRONTO: Reporte testes e output red. NÃO faça commit. Pare.
 
 ---
 
-## [ ] T-021: TDD-Impl — src/webhook/reply.ts
+## [x] T-021: TDD-Impl — src/webhook/reply.ts
 
 | Campo | Valor |
 |---|---|
