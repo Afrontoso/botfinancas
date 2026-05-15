@@ -1,0 +1,450 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── USUÁRIOS E CONTATOS ──────────────────────────────────────────────────────
+
+model User {
+  id              String   @id @default(cuid())
+  telegramUserId  String   @unique
+  name            String
+  timezone        String   @default("America/Sao_Paulo")
+  defaultCurrency String   @default("BRL")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  accounts          Account[]
+  categories        Category[]
+  transactions      Transaction[]
+  messages          MessageLog[]
+  inferences        AiInference[]
+  memory            MemoryEntry[]
+  contacts          Contact[]
+  recurringExpenses RecurringExpense[]
+  budgets           Budget[]
+  reminders         Reminder[]
+}
+
+/// Pessoas externas com quem o usuário divide despesas (ex: esposa, amigo).
+/// NÃO é um User — não tem login, não tem Telegram, não tem contas próprias no sistema.
+model Contact {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  splits SharedSplit[]
+
+  @@unique([userId, name])
+  @@index([userId])
+}
+
+// ─── CONTAS E COFRES ──────────────────────────────────────────────────────────
+
+/// Representa qualquer conta financeira do usuário.
+/// Cofres (vaults) são modelados como Account com type=vault e parentAccountId apontando
+/// para a conta-mãe. Cofres podem ser efêmeros ("cofre da farmácia", "cofre do cartão deste mês").
+/// Cartões de crédito usam closingDay e dueDay para cálculo de fatura.
+model Account {
+  id              String      @id @default(cuid())
+  userId          String
+  parentAccountId String?     // null para conta raiz; preenchido para cofres
+  name            String
+  type            AccountType
+  currency        String      @default("BRL")
+  initialBalance  Decimal     @default(0) @db.Decimal(14, 2)
+  closingDay      Int?        // 1-31, obrigatório se type=credit_card
+  dueDay          Int?        // 1-31, obrigatório se type=credit_card
+  archived        Boolean     @default(false)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parentAccount     Account?           @relation("AccountHierarchy", fields: [parentAccountId], references: [id])
+  childAccounts     Account[]          @relation("AccountHierarchy")
+  transactions      Transaction[]
+  invoices          Invoice[]
+  recurringExpenses RecurringExpense[]
+
+  @@index([userId, type])
+  @@index([parentAccountId])
+}
+
+enum AccountType {
+  checking
+  cash
+  credit_card
+  savings
+  investment
+  wallet
+  vault
+}
+
+// ─── FATURAS DE CARTÃO ────────────────────────────────────────────────────────
+
+/// Uma fatura por mês de competência por cartão. Compras feitas no cartão entre
+/// `periodStart` e `periodEnd` pertencem a esta fatura. Pagamento pode ser feito
+/// em vários pedaços ao longo do mês (pré-pagamento) — cada pagamento abate
+/// `paidAmount`. Status muda automaticamente conforme paidAmount evolui.
+model Invoice {
+  id          String        @id @default(cuid())
+  accountId   String        // Account com type=credit_card
+  periodStart DateTime      // dia seguinte ao closingDay anterior
+  periodEnd   DateTime      // closingDay deste período
+  dueDate     DateTime      // dueDay correspondente
+  totalAmount Decimal       @default(0) @db.Decimal(14, 2)
+  paidAmount  Decimal       @default(0) @db.Decimal(14, 2)
+  status      InvoiceStatus @default(open)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  account      Account          @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  transactions Transaction[]    @relation("InvoiceCharges")
+  payments     InvoicePayment[]
+
+  @@unique([accountId, periodStart])
+  @@index([accountId, status])
+  @@index([dueDate])
+}
+
+enum InvoiceStatus {
+  open
+  closed
+  partial
+  paid
+}
+
+/// Liga um pagamento (Transaction de transferência) a uma Invoice.
+/// A data de pagamento é a `transactionDate` da Transaction vinculada — não duplicar aqui.
+model InvoicePayment {
+  id            String   @id @default(cuid())
+  invoiceId     String
+  transactionId String   @unique  // a Transaction de transferência que pagou
+  amount        Decimal  @db.Decimal(14, 2)
+  createdAt     DateTime @default(now())
+
+  invoice     Invoice     @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId])
+}
+
+// ─── CATEGORIAS ───────────────────────────────────────────────────────────────
+
+model Category {
+  id        String       @id @default(cuid())
+  userId    String
+  name      String
+  type      CategoryType
+  parentId  String?
+  createdAt DateTime     @default(now())
+
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent            Category?          @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children          Category[]         @relation("CategoryHierarchy")
+  transactions      Transaction[]
+  budgets           Budget[]
+  recurringExpenses RecurringExpense[]
+
+  @@unique([userId, name])
+  @@index([userId])
+}
+
+enum CategoryType {
+  expense
+  income
+  transfer
+}
+
+// ─── TRANSAÇÕES ───────────────────────────────────────────────────────────────
+
+/// Transação financeira atômica. Convenção:
+///  - `expense` e `income`: 1 Transaction, `direction` deve ser null.
+///  - `transfer`: 2 Transactions com o mesmo `transferGroupId`, ambas amount positivo,
+///    uma com `direction=out` (conta origem) e outra com `direction=in` (conta destino).
+///  - `adjustment`: 1 Transaction, `direction` deve ser null.
+/// O campo `direction` SÓ deve ser preenchido para `type=transfer`. Para outros tipos,
+/// o sentido de saída/entrada é inferido pelo `type`.
+model Transaction {
+  id                String                @id @default(cuid())
+  userId            String
+  accountId         String?
+  categoryId        String?
+  invoiceId         String?               // preenchido quando é compra em cartão
+  type              TransactionType
+  direction         TransactionDirection? // SÓ para type=transfer; null para os demais
+  amount            Decimal               @db.Decimal(14, 2)
+  currency          String                @default("BRL")
+  description       String
+  transactionDate   DateTime
+  paymentMethod     String?
+  installmentNumber Int?
+  installmentTotal  Int?
+  source            TransactionSource     @default(telegram_text)
+  confidence        Float?
+  status            TransactionStatus     @default(confirmed)
+  transferGroupId   String?               // liga as duas pernas de uma transferência
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+
+  user            User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  account         Account?            @relation(fields: [accountId], references: [id])
+  category        Category?           @relation(fields: [categoryId], references: [id])
+  invoice         Invoice?            @relation("InvoiceCharges", fields: [invoiceId], references: [id])
+  splits          SharedSplit[]       @relation("ExpenseSplits")
+  splitSettlement SplitSettlement?    @relation("SettlementTransaction")
+  invoicePayment  InvoicePayment?
+
+  @@index([userId, transactionDate])
+  @@index([userId, type])
+  @@index([transferGroupId])
+  @@index([invoiceId])
+}
+
+enum TransactionType {
+  expense
+  income
+  transfer
+  adjustment
+}
+
+enum TransactionDirection {
+  out
+  in
+}
+
+enum TransactionSource {
+  telegram_text
+  telegram_audio
+  telegram_image
+  manual
+}
+
+enum TransactionStatus {
+  confirmed
+  pending_confirmation
+  rejected
+}
+
+// ─── SPLITS COM CONTATOS ──────────────────────────────────────────────────────
+
+/// Marca uma despesa como compartilhada com um Contact. Ex: "comprei R$200 de
+/// mercado, metade é da esposa" → SharedSplit com expectedAmount=100.
+/// Pagamentos parciais ficam em SplitSettlement. Quando soma dos settlements
+/// atinge expectedAmount, status vira `settled`. Se usuário decide não cobrar
+/// o restante, marca como `absorbed`.
+model SharedSplit {
+  id             String      @id @default(cuid())
+  transactionId  String      // a despesa original
+  contactId      String
+  expectedAmount Decimal     @db.Decimal(14, 2)
+  status         SplitStatus @default(open)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  transaction Transaction       @relation("ExpenseSplits", fields: [transactionId], references: [id], onDelete: Cascade)
+  contact     Contact           @relation(fields: [contactId], references: [id])
+  settlements SplitSettlement[]
+
+  @@index([transactionId])
+  @@index([contactId, status])
+}
+
+enum SplitStatus {
+  open
+  settled
+  absorbed
+}
+
+/// Cada pagamento parcial recebido referente a um SharedSplit. A própria entrada
+/// de dinheiro é uma Transaction (type=income, vinda do Contact); este registro
+/// liga essa transação ao split correspondente.
+/// A data de pagamento é a `transactionDate` da settlementTransaction — não duplicar aqui.
+model SplitSettlement {
+  id                      String   @id @default(cuid())
+  splitId                 String
+  settlementTransactionId String   @unique
+  amount                  Decimal  @db.Decimal(14, 2)
+  createdAt               DateTime @default(now())
+
+  split                 SharedSplit @relation(fields: [splitId], references: [id], onDelete: Cascade)
+  settlementTransaction Transaction @relation("SettlementTransaction", fields: [settlementTransactionId], references: [id], onDelete: Cascade)
+
+  @@index([splitId])
+}
+
+// ─── GASTOS FIXOS RECORRENTES ─────────────────────────────────────────────────
+
+/// Despesas/receitas que se repetem periodicamente (aluguel, internet,
+/// assinaturas, salário). Usado para: (a) auto-preencher quando usuário
+/// menciona ("paguei aluguel" → bot já sabe valor e categoria); (b) gerar
+/// lembretes quando dia esperado passar sem registro (ver Reminder, S-7).
+model RecurringExpense {
+  id             String          @id @default(cuid())
+  userId         String
+  name           String          // "Aluguel", "Internet Vivo"
+  expectedAmount Decimal         @db.Decimal(14, 2)
+  currency       String          @default("BRL")
+  type           TransactionType @default(expense)
+  categoryId     String?
+  accountId      String?
+  periodicity    RecurringPeriod
+  expectedDay    Int             // dia do mês (1-31), dia da semana (1-7) ou dia do ano (1-366)
+  active         Boolean         @default(true)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category  Category?  @relation(fields: [categoryId], references: [id])
+  account   Account?   @relation(fields: [accountId], references: [id])
+  reminders Reminder[]
+
+  @@unique([userId, name])
+  @@index([userId, active])
+}
+
+enum RecurringPeriod {
+  monthly
+  weekly
+  yearly
+}
+
+// ─── ORÇAMENTOS ───────────────────────────────────────────────────────────────
+
+/// Limite de gastos por categoria por período. Progresso é calculado por query
+/// (sum de Transaction expense por categoria no período), não armazenado.
+model Budget {
+  id         String       @id @default(cuid())
+  userId     String
+  categoryId String
+  amount     Decimal      @db.Decimal(14, 2)
+  period     BudgetPeriod @default(monthly)
+  startDate  DateTime
+  active     Boolean      @default(true)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@index([userId, active])
+  @@index([categoryId, active])
+}
+
+enum BudgetPeriod {
+  monthly
+  weekly
+}
+
+// ─── LEMBRETES ────────────────────────────────────────────────────────────────
+
+/// Notificações agendadas que o bot envia ao usuário. Execução real (cron + envio
+/// pelo Telegram) entra em S-7. No MVP só existe a estrutura de dados.
+model Reminder {
+  id                 String         @id @default(cuid())
+  userId             String
+  type               ReminderType
+  scheduledFor       DateTime
+  status             ReminderStatus @default(pending)
+  payload            Json           // dados específicos do tipo
+  recurringExpenseId String?
+  sentAt             DateTime?
+  createdAt          DateTime       @default(now())
+
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recurringExpense RecurringExpense? @relation(fields: [recurringExpenseId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status, scheduledFor])
+}
+
+enum ReminderType {
+  recurring_missing
+  budget_alert
+  invoice_due
+  custom
+}
+
+enum ReminderStatus {
+  pending
+  sent
+  dismissed
+  cancelled
+}
+
+// ─── LOGS DE MENSAGENS E INFERÊNCIAS ──────────────────────────────────────────
+
+model MessageLog {
+  id                String      @id @default(cuid())
+  userId            String
+  telegramMessageId String
+  chatId            String
+  messageType       MessageType
+  rawPayload        Json
+  normalizedText    String?
+  createdAt         DateTime    @default(now())
+
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  inferences AiInference[]
+
+  @@unique([chatId, telegramMessageId])
+  @@index([userId, createdAt])
+}
+
+enum MessageType {
+  text
+  audio
+  image
+  document
+  unknown
+}
+
+model AiInference {
+  id            String          @id @default(cuid())
+  userId        String
+  messageLogId  String
+  model         String
+  promptVersion String
+  input         String
+  rawOutput     String
+  parsedOutput  Json?
+  status        InferenceStatus
+  error         String?
+  latencyMs     Int
+  createdAt     DateTime        @default(now())
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messageLog MessageLog @relation(fields: [messageLogId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+enum InferenceStatus {
+  success
+  parse_error
+  validation_error
+  llm_error
+  low_confidence
+}
+
+model MemoryEntry {
+  id        String    @id @default(cuid())
+  userId    String
+  scope     String
+  content   Json
+  metadata  Json?
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, scope])
+  @@index([expiresAt])
+}
