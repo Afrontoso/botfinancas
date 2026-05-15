@@ -451,7 +451,7 @@ GATILHOS PARA PARAR: banco PostgreSQL não está rodando (orientar humano a subi
 
 ---
 
-## [ ] T-005: Criar shared/contract.ts
+## [*] T-005: Criar shared/contract.ts
 
 | Campo | Valor |
 |---|---|
