@@ -374,7 +374,7 @@ GATILHOS PARA PARAR: TEST_DATABASE_URL não está definida (orientar humano a cr
 
 ---
 
-## [*] T-004: Criar prisma/schema.prisma + migration inicial
+## [x] T-004: Criar prisma/schema.prisma + migration inicial
 
 | Campo | Valor |
 |---|---|
