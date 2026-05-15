@@ -1,0 +1,18 @@
+{
+  "name": "llm_with_markdown",
+  "input": {
+    "text": "Gastei 30 no almoço",
+    "currentDate": "2026-05-13"
+  },
+  "llmRawResponse": "```json\n{\"intent\":\"create_transaction\",\"type\":\"expense\",\"amount\":30,\"currency\":\"BRL\",\"description\":\"Almoço\",\"category\":\"Alimentação\",\"transactionDate\":\"2026-05-13\",\"paymentMethod\":null,\"confidence\":0.88}\n```",
+  "expected": {
+    "kind": "transaction_created",
+    "tx": {
+      "type": "expense",
+      "amount": 30,
+      "category": "Alimentação",
+      "transactionDate": "2026-05-13",
+      "status": "confirmed"
+    }
+  }
+}

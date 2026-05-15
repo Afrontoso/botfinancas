@@ -1,0 +1,18 @@
+{
+  "name": "income_salary",
+  "input": {
+    "text": "Recebi 3000 de salario",
+    "currentDate": "2026-05-13"
+  },
+  "llmRawResponse": "{\"intent\":\"create_transaction\",\"type\":\"income\",\"amount\":3000,\"currency\":\"BRL\",\"description\":\"Salário\",\"category\":\"Salário\",\"transactionDate\":\"2026-05-13\",\"paymentMethod\":null,\"confidence\":0.95}",
+  "expected": {
+    "kind": "transaction_created",
+    "tx": {
+      "type": "income",
+      "amount": 3000,
+      "category": "Salário",
+      "transactionDate": "2026-05-13",
+      "status": "confirmed"
+    }
+  }
+}

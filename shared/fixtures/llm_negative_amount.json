@@ -1,0 +1,12 @@
+{
+  "name": "llm_negative_amount",
+  "input": {
+    "text": "gastei -50 reais",
+    "currentDate": "2026-05-13"
+  },
+  "llmRawResponse": "{\"intent\":\"create_transaction\",\"type\":\"expense\",\"amount\":-50,\"currency\":\"BRL\",\"description\":\"Gasto\",\"category\":\"Outros\",\"transactionDate\":\"2026-05-13\",\"paymentMethod\":null,\"confidence\":0.88}",
+  "expected": {
+    "kind": "error",
+    "reason": "validation_error"
+  }
+}

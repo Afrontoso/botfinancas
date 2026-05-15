@@ -1,0 +1,18 @@
+{
+  "name": "expense_with_card",
+  "input": {
+    "text": "Paguei 120 no cartão Nubank",
+    "currentDate": "2026-05-13"
+  },
+  "llmRawResponse": "{\"intent\":\"create_transaction\",\"type\":\"expense\",\"amount\":120,\"currency\":\"BRL\",\"description\":\"Compra no cartão\",\"category\":\"Outros\",\"transactionDate\":\"2026-05-13\",\"paymentMethod\":\"Nubank\",\"confidence\":0.90}",
+  "expected": {
+    "kind": "transaction_created",
+    "tx": {
+      "type": "expense",
+      "amount": 120,
+      "paymentMethod": "Nubank",
+      "transactionDate": "2026-05-13",
+      "status": "confirmed"
+    }
+  }
+}

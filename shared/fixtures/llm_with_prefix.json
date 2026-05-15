@@ -1,0 +1,18 @@
+{
+  "name": "llm_with_prefix",
+  "input": {
+    "text": "Paguei 80 de uber",
+    "currentDate": "2026-05-13"
+  },
+  "llmRawResponse": "Claro! Aqui está: {\"intent\":\"create_transaction\",\"type\":\"expense\",\"amount\":80,\"currency\":\"BRL\",\"description\":\"Uber\",\"category\":\"Transporte\",\"transactionDate\":\"2026-05-13\",\"paymentMethod\":null,\"confidence\":0.91}",
+  "expected": {
+    "kind": "transaction_created",
+    "tx": {
+      "type": "expense",
+      "amount": 80,
+      "category": "Transporte",
+      "transactionDate": "2026-05-13",
+      "status": "confirmed"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "llm_invalid_json",
+  "input": {
+    "text": "fiz um gasto",
+    "currentDate": "2026-05-13"
+  },
+  "llmRawResponse": "isso não é json {broken",
+  "expected": {
+    "kind": "error",
+    "reason": "parse_error"
+  }
+}

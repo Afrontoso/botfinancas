@@ -1,0 +1,11 @@
+{
+  "name": "query_balance",
+  "input": {
+    "text": "quanto gastei hoje?",
+    "currentDate": "2026-05-13"
+  },
+  "llmRawResponse": "{\"intent\":\"query\",\"queryType\":\"expense_by_category\",\"period\":{\"from\":\"2026-05-13\",\"to\":\"2026-05-13\"},\"confidence\":0.93}",
+  "expected": {
+    "kind": "query_answered"
+  }
+}

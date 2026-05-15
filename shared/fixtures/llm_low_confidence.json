@@ -1,0 +1,16 @@
+{
+  "name": "llm_low_confidence",
+  "input": {
+    "text": "comprei algo",
+    "currentDate": "2026-05-13"
+  },
+  "llmRawResponse": "{\"intent\":\"create_transaction\",\"type\":\"expense\",\"amount\":50,\"currency\":\"BRL\",\"description\":\"Compra\",\"category\":\"Outros\",\"transactionDate\":\"2026-05-13\",\"paymentMethod\":null,\"confidence\":0.70}",
+  "expected": {
+    "kind": "needs_confirmation",
+    "tx": {
+      "type": "expense",
+      "amount": 50,
+      "status": "pending_confirmation"
+    }
+  }
+}

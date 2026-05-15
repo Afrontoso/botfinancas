@@ -1,0 +1,18 @@
+{
+  "name": "expense_simple",
+  "input": {
+    "text": "Gastei 50 no mercado ontem",
+    "currentDate": "2026-05-13"
+  },
+  "llmRawResponse": "{\"intent\":\"create_transaction\",\"type\":\"expense\",\"amount\":50,\"currency\":\"BRL\",\"description\":\"Mercado\",\"category\":\"Mercado\",\"transactionDate\":\"2026-05-12\",\"paymentMethod\":null,\"confidence\":0.92}",
+  "expected": {
+    "kind": "transaction_created",
+    "tx": {
+      "type": "expense",
+      "amount": 50,
+      "category": "Mercado",
+      "transactionDate": "2026-05-12",
+      "status": "confirmed"
+    }
+  }
+}
