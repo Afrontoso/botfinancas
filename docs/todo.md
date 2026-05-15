@@ -232,7 +232,7 @@ GATILHOS PARA PARAR:
 
 ---
 
-## [*] T-002: Instalar todas as dependências do projeto
+## [x] T-002: Instalar todas as dependências do projeto
 
 | Campo | Valor |
 |---|---|
