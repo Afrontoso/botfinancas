@@ -302,7 +302,7 @@ GATILHOS PARA PARAR: conflito de versões irresolvível; Tempo > 30min.
 
 ---
 
-## [ ] T-003: Configurar Vitest + vitest.config.ts + tests/setup.ts
+## [*] T-003: Configurar Vitest + vitest.config.ts + tests/setup.ts
 
 | Campo | Valor |
 |---|---|
