@@ -451,7 +451,7 @@ GATILHOS PARA PARAR: banco PostgreSQL não está rodando (orientar humano a subi
 
 ---
 
-## [*] T-005: Criar shared/contract.ts
+## [x] T-005: Criar shared/contract.ts
 
 | Campo | Valor |
 |---|---|
@@ -518,7 +518,7 @@ GATILHOS PARA PARAR: erro de compilação TypeScript que indica problema no cont
 
 ---
 
-## [ ] T-006: Criar shared/fixtures/*.json (9 fixtures do MVP)
+## [*] T-006: Criar shared/fixtures/*.json (9 fixtures do MVP)
 
 | Campo | Valor |
 |---|---|
