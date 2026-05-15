@@ -666,7 +666,7 @@ DEFINIÇÃO DE PRONTO:
 
 ---
 
-## [*] T-008: Review S-0
+## [x] T-008: Review S-0
 
 | Campo | Valor |
 |---|---|
@@ -738,7 +738,7 @@ DEFINIÇÃO DE PRONTO:
 
 ---
 
-## [ ] T-009: GET /api/health + servidor mínimo rodando
+## [*] T-009: GET /api/health + servidor mínimo rodando
 
 | Campo | Valor |
 |---|---|
@@ -795,7 +795,7 @@ DEFINIÇÃO DE PRONTO:
 
 ---
 
-## [ ] T-010: src/lib/prisma.ts + src/lib/logger.ts
+## [*] T-010: src/lib/prisma.ts + src/lib/logger.ts
 
 | Campo | Valor |
 |---|---|
@@ -862,7 +862,7 @@ DEFINIÇÃO DE PRONTO:
 
 ---
 
-## [ ] T-011: src/processor/stub.ts
+## [*] T-011: src/processor/stub.ts
 
 | Campo | Valor |
 |---|---|
