@@ -1496,7 +1496,7 @@ DEFINIÇÃO DE PRONTO: Reporte arquivo e output green. NÃO faça commit. Pare.
 
 ---
 
-## [ ] T-022: TDD-Test — POST /api/webhooks/telegram (testes falhando)
+## [x] T-022: TDD-Test — POST /api/webhooks/telegram (testes falhando)
 
 | Campo | Valor |
 |---|---|
@@ -1559,7 +1559,7 @@ DEFINIÇÃO DE PRONTO: Reporte 14 testes e output red. NÃO faça commit. Pare.
 
 ---
 
-## [ ] T-023: TDD-Impl — src/app/api/webhooks/telegram/route.ts
+## [x] T-023: TDD-Impl — src/app/api/webhooks/telegram/route.ts
 
 | Campo | Valor |
 |---|---|
@@ -1619,7 +1619,7 @@ DEFINIÇÃO DE PRONTO: Reporte arquivo criado e output green. NÃO faça commit.
 
 ---
 
-## [ ] T-024: tests/integration/webhook-end-to-end.test.ts
+## [x] T-024: tests/integration/webhook-end-to-end.test.ts
 
 | Campo | Valor |
 |---|---|
@@ -1822,7 +1822,7 @@ Usar os valores de .env.local para substituir os placeholders. Pare após gerar.
 
 ---
 
-## [ ] T-028: README Parte A
+## [x] T-028: README Parte A
 
 | Campo | Valor |
 |---|---|

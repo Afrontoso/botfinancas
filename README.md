@@ -1,36 +1,172 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Botfinancas
 
-## Getting Started
+Bot pessoal de finanças via Telegram com processamento por IA local (Ollama). Recebe mensagens de texto/voz, extrai transações financeiras e responde com confirmações e resumos.
 
-First, run the development server:
+---
+
+## Pré-requisitos
+
+| Ferramenta | Versão mínima |
+|---|---|
+| Node.js | 20 |
+| pnpm | 9 |
+| PostgreSQL | 16 |
+| Tailscale | qualquer (para o túnel) |
+
+---
+
+## Setup do banco de dados
+
+### 1. Criar os bancos
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+psql postgres -c "CREATE USER botfinancas WITH PASSWORD 'botfinancas';"
+psql postgres -c "CREATE DATABASE botfinancas OWNER botfinancas;"
+psql postgres -c "CREATE DATABASE botfinancas_test OWNER botfinancas;"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Configurar variáveis de ambiente
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copie `.env.example` para `.env.local` e preencha os valores:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+cp .env.example .env.local
+```
 
-## Learn More
+Edite `.env.local` com suas credenciais reais (ver seção abaixo).
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Rodar migrations
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm prisma migrate deploy
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Para o banco de teste:
 
-## Deploy on Vercel
+```bash
+DATABASE_URL="postgresql://botfinancas:botfinancas@localhost:5432/botfinancas_test" \
+  pnpm prisma migrate deploy
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Variáveis de ambiente
+
+O arquivo `.env.example` contém todas as variáveis necessárias. Crie `.env.local` com os valores reais — **nunca commite esse arquivo**.
+
+| Variável | Descrição |
+|---|---|
+| `DATABASE_URL` | URL do banco PostgreSQL de desenvolvimento |
+| `TEST_DATABASE_URL` | URL do banco de teste (separado do dev) |
+| `TELEGRAM_BOT_TOKEN` | Token gerado pelo @BotFather |
+| `TELEGRAM_WEBHOOK_SECRET` | String secreta ≥32 chars para autenticar o webhook |
+| `TELEGRAM_ALLOWED_USER_IDS` | IDs Telegram autorizados, separados por vírgula |
+| `OLLAMA_BASE_URL` | URL base do Ollama (ex: `http://localhost:11434`) |
+| `OLLAMA_TEXT_MODEL` | Modelo de texto (ex: `llama3.1`) |
+| `LOG_LEVEL` | Nível de log pino: `debug`, `info`, `warn`, `error` |
+| `NODE_ENV` | `development` ou `production` |
+
+---
+
+## Criar bot no Telegram (BotFather)
+
+1. Abra o Telegram e fale com **@BotFather**
+2. Envie `/newbot` e siga as instruções (escolha nome e username)
+3. Copie o **token** exibido — ele vai para `TELEGRAM_BOT_TOKEN` no `.env.local`
+4. Para descobrir seu `telegramUserId`, fale com **@userinfobot** — o número vai para `TELEGRAM_ALLOWED_USER_IDS`
+5. Gere o `TELEGRAM_WEBHOOK_SECRET`:
+   ```bash
+   openssl rand -hex 32
+   ```
+
+---
+
+## Configurar túnel (Tailscale Funnel)
+
+O webhook do Telegram exige uma URL HTTPS pública. Use o Tailscale Funnel para expor o servidor local:
+
+```bash
+# Instalar (macOS)
+brew install tailscale
+
+# Autenticar
+tailscale up
+
+# Expor porta 3000 publicamente
+tailscale funnel 3000
+```
+
+A URL pública exibida (formato `https://<hostname>.ts.net`) será usada no próximo passo.
+
+Verifique que está funcionando (com `pnpm dev` rodando):
+
+```bash
+curl https://<sua-url>.ts.net/api/health
+# → {"status":"ok"}
+```
+
+---
+
+## Configurar webhook no Telegram
+
+Com o servidor e o túnel rodando, registre o webhook:
+
+```bash
+curl -X POST "https://api.telegram.org/bot<BOT_TOKEN>/setWebhook" \
+  -d "url=https://<sua-url>.ts.net/api/webhooks/telegram" \
+  -d "secret_token=<WEBHOOK_SECRET>"
+```
+
+Substitua `<BOT_TOKEN>` e `<WEBHOOK_SECRET>` pelos valores do `.env.local`. A resposta deve ser:
+
+```json
+{"ok":true,"description":"Webhook was set"}
+```
+
+Para verificar:
+
+```bash
+curl "https://api.telegram.org/bot<BOT_TOKEN>/getWebhookInfo"
+```
+
+---
+
+## Como rodar
+
+### Desenvolvimento
+
+```bash
+pnpm install
+pnpm dev          # servidor em http://localhost:3000
+```
+
+### Testes
+
+```bash
+pnpm test                          # suite completa
+pnpm test tests/webhook/route      # arquivo específico
+```
+
+### Lint
+
+```bash
+pnpm lint
+```
+
+### Prisma
+
+```bash
+pnpm prisma generate               # regenerar client após mudanças no schema
+pnpm prisma migrate dev --name X   # criar nova migration
+pnpm prisma studio                 # interface visual do banco
+```
+
+---
+
+## Segurança
+
+- **Nunca commite `.env.local`** — ele está no `.gitignore`
+- Não exponha o endpoint de health sem autenticação em produção
+- O `TELEGRAM_WEBHOOK_SECRET` deve ter pelo menos 32 caracteres aleatórios
+- Logs em nível `info`/acima nunca incluem o payload completo (pode conter dados pessoais)
+- A allowlist (`TELEGRAM_ALLOWED_USER_IDS`) é o único mecanismo de controle de acesso — mantenha-a restrita ao seu próprio ID
