@@ -518,7 +518,7 @@ GATILHOS PARA PARAR: erro de compilação TypeScript que indica problema no cont
 
 ---
 
-## [*] T-006: Criar shared/fixtures/*.json (9 fixtures do MVP)
+## [x] T-006: Criar shared/fixtures/*.json (9 fixtures do MVP)
 
 | Campo | Valor |
 |---|---|
@@ -611,7 +611,7 @@ GATILHOS PARA PARAR: dúvida sobre o valor de algum campo que possa impactar os 
 
 ---
 
-## [ ] T-007: Criar .env.example completo
+## [x] T-007: Criar .env.example completo
 
 | Campo | Valor |
 |---|---|
@@ -666,7 +666,7 @@ DEFINIÇÃO DE PRONTO:
 
 ---
 
-## [ ] T-008: Review S-0
+## [*] T-008: Review S-0
 
 | Campo | Valor |
 |---|---|
