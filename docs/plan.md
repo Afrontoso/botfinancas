@@ -4,14 +4,14 @@
 
 Este documento define **três coisas**:
 
-1. Como transformar o `ROADMAP_AGENTES_IA_FINANCEIRO.md` + `specs/` em um `todo.md` executável.
-2. Quais regras a IA executora deve seguir ao trabalhar esse `todo.md` para **não derivar nem alucinar**.
-3. O **template de prompt** que cada task do `todo.md` deve embutir, pronto para ser copiado e colado em uma nova sessão de IA.
+1. Como transformar o `docs/ROADMAP_AGENTES_IA_FINANCEIRO.md` + `docs/specs/` em um `docs/docs/todo.md` executável.
+2. Quais regras a IA executora deve seguir ao trabalhar esse `docs/todo.md` para **não derivar nem alucinar**.
+3. O **template de prompt** que cada task do `docs/todo.md` deve embutir, pronto para ser copiado e colado em uma nova sessão de IA.
 
 Fluxo geral:
 
 ```
-ROADMAP + specs/  →  [plan.md (este doc)]  →  todo.md  →  execução task a task  →  produto
+ROADMAP + specs/  →  [plan.md (este doc)]  →  docs/todo.md  →  execução task a task  →  produto
 ```
 
 ---
@@ -20,12 +20,12 @@ ROADMAP + specs/  →  [plan.md (este doc)]  →  todo.md  →  execução task 
 
 | Item | Estado |
 |---|---|
-| `ROADMAP_AGENTES_IA_FINANCEIRO.md` | Pronto. Escopo de produto canônico. |
-| `specs/00-contratos-compartilhados.md` | **Pronto.** Schema completo (cofres, faturas, splits, recorrentes, orçamentos, contatos). Revisado duas vezes (Sonnet). Fechado em 2026-05-14. |
-| `specs/01-parte-a-infra-webhook.md` | Pronto. Refere-se a Parte A. |
-| `specs/02-parte-b-pipeline-ia.md` | Pronto. Refere-se a Parte B. |
+| `docs/ROADMAP_AGENTES_IA_FINANCEIRO.md` | Pronto. Escopo de produto canônico. |
+| `docs/specs/00-contratos-compartilhados.md` | **Pronto.** Schema completo (cofres, faturas, splits, recorrentes, orçamentos, contatos). Revisado duas vezes (Sonnet). Fechado em 2026-05-14. |
+| `docs/specs/01-parte-a-infra-webhook.md` | Pronto. Refere-se a Parte A. |
+| `docs/specs/02-parte-b-pipeline-ia.md` | Pronto. Refere-se a Parte B. |
 | `plan.md` (este doc) | Pronto. Workflow atualizado para disparo automático (sem cola de prompt pelo humano). |
-| `todo.md` | **Pronto.** Gerado após fechamento de S-0.5 em 2026-05-14. |
+| `docs/todo.md` | **Pronto.** Gerado após fechamento de S-0.5 em 2026-05-14. |
 
 **Sprint 0.5 fechada.** Execução pode começar pelo S-0.
 
@@ -33,7 +33,7 @@ ROADMAP + specs/  →  [plan.md (este doc)]  →  todo.md  →  execução task 
 
 ## 1.5 Convenção de marcadores
 
-Em qualquer checklist deste projeto (este `plan.md`, o futuro `todo.md`, e seções de aceite dentro de tasks), os marcadores significam:
+Em qualquer checklist deste projeto (este `plan.md`, o futuro `docs/todo.md`, e seções de aceite dentro de tasks), os marcadores significam:
 
 | Marcador | Significado |
 |---|---|
@@ -53,15 +53,15 @@ Nenhuma outra transição é válida. Em particular, **não pular `[*]`** — o 
 
 ## 2. Fontes de verdade e precedência
 
-Quando duas fontes conflitarem, a IA **deve seguir a de maior precedência** e registrar o conflito em uma seção "Conflitos detectados" no fim do `todo.md`.
+Quando duas fontes conflitarem, a IA **deve seguir a de maior precedência** e registrar o conflito em uma seção "Conflitos detectados" no fim do `docs/todo.md`.
 
 | # | Fonte | Tipo | Precedência |
 |---|---|---|---:|
 | 1 | `plan.md` (este doc) | Processo de trabalho | Mais alta — sobrescreve tudo em "como trabalhar" |
-| 2 | `specs/00-contratos-compartilhados.md` | Contratos técnicos | Sobrescreve roadmap em decisões técnicas |
-| 3 | `specs/01` e `specs/02` | Decomposição em fases | Sobrescreve roadmap em ordem de implementação |
-| 4 | `ROADMAP_AGENTES_IA_FINANCEIRO.md` | Escopo de produto | Base. Define **o quê**, não **como**. |
-| 5 | `todo.md` | Lista de execução | Output, nunca fonte. |
+| 2 | `docs/specs/00-contratos-compartilhados.md` | Contratos técnicos | Sobrescreve roadmap em decisões técnicas |
+| 3 | `docs/specs/01` e `docs/specs/02` | Decomposição em fases | Sobrescreve roadmap em ordem de implementação |
+| 4 | `docs/ROADMAP_AGENTES_IA_FINANCEIRO.md` | Escopo de produto | Base. Define **o quê**, não **como**. |
+| 5 | `docs/todo.md` | Lista de execução | Output, nunca fonte. |
 
 ---
 
@@ -69,23 +69,23 @@ Quando duas fontes conflitarem, a IA **deve seguir a de maior precedência** e r
 
 ```
 Etapa A — Pré-requisito (Sprint 0.5)
-  Humano + IA atualizam specs/00 com schema expandido (cofres, faturas, splits,
+  Humano + IA atualizam docs/specs/00 com schema expandido (cofres, faturas, splits,
   gastos fixos, orçamentos, contatos). Nada mais começa antes disso fechar.
 
-Etapa B — Geração do todo.md
-  IA lê: plan.md → specs/00 → specs/01 → specs/02 → ROADMAP
+Etapa B — Geração do docs/todo.md
+  IA lê: plan.md → docs/specs/00 → docs/specs/01 → docs/specs/02 → ROADMAP
   IA aplica §6 (regras de geração) e §7 (template de task)
-  IA produz todo.md com tasks atômicas, ordenadas por dependência,
+  IA produz docs/todo.md com tasks atômicas, ordenadas por dependência,
   cada uma com prompt completo embutido
 
 Etapa C — Validação humana
-  Humano lê o todo.md inteiro, valida sequência e granularidade,
+  Humano lê o docs/todo.md inteiro, valida sequência e granularidade,
   ajusta se necessário, faz commit
 
 Etapa D — Execução
   Para cada task em ordem:
     1. Humano diz "continuar" (ou "próxima task")
-    2. Sonnet lê todo.md, identifica primeira task [ ], marca como [*]
+    2. Sonnet lê docs/todo.md, identifica primeira task [ ], marca como [*]
     3. Sonnet spawna agente Opus com o prompt da task
     4. Opus executa seguindo §9 (regras de execução): testes, implementação, suite completa
     5. Sonnet revisa o trabalho (read-only) e reporta ao humano: veredicto + mensagem de commit
@@ -104,7 +104,7 @@ Etapa E — Encerramento de sprint
 | Sprint | Conteúdo | Pré-condição |
 |---|---|---|
 | **S-0** | Bootstrap do repo, deps, Prisma, vitest, env | Nenhuma |
-| **S-0.5** | Expansão de schema + atualização de `specs/00` | Decisões fechadas em 2026-05-13 — falta apenas a tarefa mecânica de escrever as alterações em `specs/00` |
+| **S-0.5** | Expansão de schema + atualização de `docs/specs/00` | Decisões fechadas em 2026-05-13 — falta apenas a tarefa mecânica de escrever as alterações em `docs/specs/00` |
 | **S-1** | Parte A (infra, webhook, persistência) | S-0.5 fechada |
 | **S-2** | Parte B (pipeline IA, sanitização, financial service) | S-0.5 fechada (paralela à S-1) |
 | **S-3** | Integração A↔B + testes end-to-end | S-1 e S-2 fechadas |
@@ -124,7 +124,7 @@ Etapa E — Encerramento de sprint
 
 ## 5. Sprint 0.5 — Atualização de schema (obrigatória)
 
-Esta sprint **bloqueia** todas as outras. As decisões de produto foram fechadas em 2026-05-13. O que resta é a tarefa mecânica de escrever o schema em `specs/00`.
+Esta sprint **bloqueia** todas as outras. As decisões de produto foram fechadas em 2026-05-13. O que resta é a tarefa mecânica de escrever o schema em `docs/specs/00`.
 
 ### Decisões fechadas
 
@@ -139,26 +139,26 @@ Esta sprint **bloqueia** todas as outras. As decisões de produto foram fechadas
 
 ### O que falta nesta sprint
 
-- [x] Reescrever `specs/00-contratos-compartilhados.md`:
+- [x] Reescrever `docs/specs/00-contratos-compartilhados.md`:
   - Schema Prisma completo com todas as entidades novas e enums.
   - Fixtures expandidas cobrindo: transferência entre contas, pagamento parcial de fatura, split com pagamento parcial, registro de rendimento de cofre, alerta de orçamento, lembrete de gasto fixo.
   - Contrato `processMessage` revisado com novas intenções: `record_transfer`, `record_invoice_payment`, `record_split_settlement`, `record_yield`, `query_budget`, `query_invoice`, `confirm_recurring`.
-- [x] Revisar `specs/01` e `specs/02` — adaptar se algo mudou. (Duas rodadas de revisão Sonnet + correções Opus aplicadas.)
-- [x] Confirmação explícita do humano: **"schema fechado, pode gerar todo.md"**. (Confirmado em 2026-05-14.)
+- [x] Revisar `docs/specs/01` e `docs/specs/02` — adaptar se algo mudou. (Duas rodadas de revisão Sonnet + correções Opus aplicadas.)
+- [x] Confirmação explícita do humano: **"schema fechado, pode gerar docs/todo.md"**. (Confirmado em 2026-05-14.)
 
 ---
 
-## 6. Regras para gerar `todo.md`
+## 6. Regras para gerar `docs/todo.md`
 
-A IA encarregada de gerar o `todo.md` deve seguir estas regras na ordem.
+A IA encarregada de gerar o `docs/todo.md` deve seguir estas regras na ordem.
 
 ### 6.1 Inputs obrigatórios (ler nesta ordem)
 
 1. `plan.md` (este doc) — para entender o template e regras
-2. `specs/00-contratos-compartilhados.md` — para schema, contratos, fixtures
-3. `specs/01-parte-a-infra-webhook.md` — para escopo da Parte A
-4. `specs/02-parte-b-pipeline-ia.md` — para escopo da Parte B
-5. `ROADMAP_AGENTES_IA_FINANCEIRO.md` — para escopo de produto e features fora dos specs
+2. `docs/specs/00-contratos-compartilhados.md` — para schema, contratos, fixtures
+3. `docs/specs/01-parte-a-infra-webhook.md` — para escopo da Parte A
+4. `docs/specs/02-parte-b-pipeline-ia.md` — para escopo da Parte B
+5. `docs/ROADMAP_AGENTES_IA_FINANCEIRO.md` — para escopo de produto e features fora dos specs
 
 ### 6.2 Como quebrar em tasks
 
@@ -176,14 +176,14 @@ A IA encarregada de gerar o `todo.md` deve seguir estas regras na ordem.
 
 ### 6.4 Cobertura mínima
 
-O `todo.md` está completo quando:
+O `docs/todo.md` está completo quando:
 
 - Todas as features do roadmap estão cobertas por alguma task ou sprint marcada como "fora do MVP".
 - Todos os critérios de aceite dos specs estão cobertos.
 - Cada sprint tem ao menos uma task de "review" como última task.
 - Cada arquivo do schema tem ao menos uma task associada (criação, migration, teste).
 
-### 6.5 Última seção do `todo.md`
+### 6.5 Última seção do `docs/todo.md`
 
 ```markdown
 ## Conflitos detectados
@@ -195,7 +195,7 @@ O `todo.md` está completo quando:
 
 ---
 
-## 7. Estrutura obrigatória de cada item do `todo.md`
+## 7. Estrutura obrigatória de cada item do `docs/todo.md`
 
 Todo item segue **exatamente** este template. Sem campos extras, sem campos faltantes.
 
@@ -261,7 +261,7 @@ LEITURA OBRIGATÓRIA ANTES DE COMEÇAR
 ═══════════════════════════════════════════════════════════
 
 1. Leia plan.md inteiro — especialmente §9 (regras de execução). Você DEVE seguir essas regras.
-2. Leia specs/00-contratos-compartilhados.md, seções: <listar exatamente>
+2. Leia docs/specs/00-contratos-compartilhados.md, seções: <listar exatamente>
 3. Leia specs/<0N>-<parte>.md, seções: <listar exatamente>
 4. (Opcional) Roadmap, seção <X> para contexto.
 
@@ -359,7 +359,7 @@ Cada regra tem **gatilho** (quando se aplica), **FAÇA** (ação correta) e **N�
 ### R-1 — Trabalhe sempre na primeira task disponível em ordem
 - **Gatilho:** sempre que o Sonnet spawnar o Opus para execução.
 - **FAÇA:** ler a task inteira (prompt já foi extraído pelo Sonnet). Executar apenas o que está no prompt. A marcação `[ ]` → `[*]` já foi feita pelo Sonnet antes de você ser iniciado.
-- **NÃO FAÇA:** pular para uma task que parece "mais fácil" ou "mais interessante". Não fazer múltiplas tasks numa sessão. Não tocar tasks `[x]`. Não reeditar `todo.md`.
+- **NÃO FAÇA:** pular para uma task que parece "mais fácil" ou "mais interessante". Não fazer múltiplas tasks numa sessão. Não tocar tasks `[x]`. Não reeditar `docs/todo.md`.
 
 ### R-2 — Apenas leia os arquivos listados em "Leitura obrigatória"
 - **Gatilho:** ao entrar em uma task.
@@ -372,7 +372,7 @@ Cada regra tem **gatilho** (quando se aplica), **FAÇA** (ação correta) e **N�
 - **NÃO FAÇA:** criar utility/helper/type/index extra "porque vai ficar mais limpo". Refator vira task própria.
 
 ### R-4 — Nunca modifique fontes de verdade fora de tasks dedicadas
-- **Gatilho:** ao tocar `prisma/schema.prisma`, `shared/contract.ts`, `shared/fixtures/*`, `specs/*`, `plan.md`, `roadmap`.
+- **Gatilho:** ao tocar `prisma/schema.prisma`, `shared/contract.ts`, `shared/fixtures/*`, `docs/specs/*`, `plan.md`, `roadmap`.
 - **FAÇA:** confirmar que a task atual é explicitamente sobre esse arquivo. Se não, parar.
 - **NÃO FAÇA:** "ajustar rapidinho" um campo no schema no meio de outra task.
 
@@ -408,12 +408,12 @@ Cada regra tem **gatilho** (quando se aplica), **FAÇA** (ação correta) e **N�
 
 ### R-11 — Dois commits por task: implementação + marcação
 - **Gatilho:** ao terminar uma task.
-- **FAÇA:** após Sonnet review aprovado e revisão humana, dois commits separados: (1) implementação com mensagem `T-NNN: <título>`; (2) marcação `[*]` → `[x]` no `todo.md` com mensagem `T-NNN: marcar concluída`. Sempre humano commita, nunca a IA.
+- **FAÇA:** após Sonnet review aprovado e revisão humana, dois commits separados: (1) implementação com mensagem `T-NNN: <título>`; (2) marcação `[*]` → `[x]` no `docs/todo.md` com mensagem `T-NNN: marcar concluída`. Sempre humano commita, nunca a IA.
 - **NÃO FAÇA:** acumular mudanças de várias tasks num commit; commitar antes da Sonnet review aprovar; misturar implementação com marcação no mesmo commit; commitar sem revisão humana.
 
 ### R-12 — Trabalho extra inesperado vira nova task
 - **Gatilho:** durante uma task, você descobre que precisa fazer algo que não estava previsto.
-- **FAÇA:** parar a task atual, descrever o trabalho extra, pedir para o humano abrir nova task `T-NNN-bis` ou ajustar o `todo.md`.
+- **FAÇA:** parar a task atual, descrever o trabalho extra, pedir para o humano abrir nova task `T-NNN-bis` ou ajustar o `docs/todo.md`.
 - **NÃO FAÇA:** fazer o trabalho extra dentro da task atual "pra não perder o pique".
 
 ### R-13 — Não delegue entendimento ao usuário
@@ -439,7 +439,7 @@ Uma task só pode ser marcada `[x]` quando **TODAS** as condições abaixo são 
 5. **Sonnet aprovou na revisão automática** (ver §11.5). Ressalvas críticas resolvidas pelo Opus e revalidadas; ressalvas opcionais avaliadas e descartadas ou viradas em nova task.
 6. Humano fez review do diff e aprovou.
 7. Commit de implementação existe com mensagem `T-NNN: <título>`.
-8. Marcador no `todo.md` virou `[x]` em commit separado `T-NNN: marcar concluída`.
+8. Marcador no `docs/todo.md` virou `[x]` em commit separado `T-NNN: marcar concluída`.
 9. Seção "Notas de execução" da task tem: arquivos modificados, hashes dos dois commits, observações, eventuais notas da Sonnet review.
 
 ---
@@ -463,8 +463,8 @@ O humano só precisa dar dois comandos por task: **"continuar"** (ou "próxima t
 ### Fluxo normal
 
 1. **Disparo.** Humano diz "continuar" (ou "próxima task") na sessão Claude Code em curso.
-2. **Identificação.** Sonnet lê `todo.md`, encontra a primeira task `[ ]`, lê o prompt embutido nela.
-3. **Marcação como em desenvolvimento.** Sonnet edita `todo.md`: `[ ]` → `[*]`. Não commita.
+2. **Identificação.** Sonnet lê `docs/todo.md`, encontra a primeira task `[ ]`, lê o prompt embutido nela.
+3. **Marcação como em desenvolvimento.** Sonnet edita `docs/todo.md`: `[ ]` → `[*]`. Não commita.
 4. **Execução via agente Opus.** Sonnet spawna um agente Opus com o prompt da task. O Opus executa seguindo §9: escreve testes, implementa, roda suite completa, reporta de volta.
 5. **Revisão Sonnet (read-only).** Sonnet lê os arquivos tocados pelo Opus e valida contra os critérios de aceite da task. Aponta: `aprovado`, ou problemas classificados como `crítico` / `opcional`. Sonnet **nunca escreve** durante revisão.
 6. **Decisão.**
@@ -473,11 +473,11 @@ O humano só precisa dar dois comandos por task: **"continuar"** (ou "próxima t
    - Se **opcional**: Sonnet reporta, humano decide ignorar ou abrir task nova. Não trata na sessão atual.
 7. **Revisão humana.** Humano lê o diff, valida critérios de aceite manualmente.
 8. **Commit de implementação.** Humano faz `git commit` com a mensagem sugerida: `T-NNN: <título>`.
-9. **Confirmação.** Humano diz "commitado" (ou similar). Sonnet edita `todo.md`: `[*]` → `[x]` e sugere o segundo commit: `T-NNN: marcar concluída`. Humano commita.
+9. **Confirmação.** Humano diz "commitado" (ou similar). Sonnet edita `docs/todo.md`: `[*]` → `[x]` e sugere o segundo commit: `T-NNN: marcar concluída`. Humano commita.
 
 ### Se a execução for interrompida no meio
 
-- O `[*]` fica no `todo.md`. Na próxima sessão, humano diz "continuar" — Sonnet vê o `[*]`, lê as "Notas de execução", decide retomar ou spawnar Opus do zero.
+- O `[*]` fica no `docs/todo.md`. Na próxima sessão, humano diz "continuar" — Sonnet vê o `[*]`, lê as "Notas de execução", decide retomar ou spawnar Opus do zero.
 
 ### Por que Sonnet revisa Opus (não o contrário)
 
@@ -510,7 +510,7 @@ Modelo distinto do executor reduz vieses — Opus normaliza as próprias escolha
 - `app/` (estrutura mínima do App Router)
 
 ### Arquivos proibidos de tocar
-- Qualquer arquivo em `specs/`, `prisma/`, `shared/`, `prompts/`
+- Qualquer arquivo em `docs/specs/`, `prisma/`, `shared/`, `prompts/`
 
 ### Critérios de aceite
 - [ ] `package.json` declara `next@^14`, `typescript@^5`, `@types/node`, `@types/react`
@@ -528,14 +528,14 @@ TIPO: Setup
 
 LEITURA OBRIGATÓRIA:
 1. plan.md (inteiro, especialmente §9)
-2. specs/00-contratos-compartilhados.md, seção 1 (stack base) e seção 6 (estrutura)
+2. docs/specs/00-contratos-compartilhados.md, seção 1 (stack base) e seção 6 (estrutura)
 
 OBJETIVO:
 Criar o esqueleto Next.js + TypeScript do projeto, sem qualquer feature, pronto para receber as próximas tasks.
 
 ESCOPO:
 - Iniciar projeto com pnpm + Next.js 14 + TypeScript strict
-- tsconfig conforme specs/00 §1
+- tsconfig conforme docs/specs/00 §1
 - Estrutura mínima do App Router (apenas page.tsx vazia)
 - .gitignore padrão Node + Next + Prisma
 
@@ -591,7 +591,7 @@ DEFINIÇÃO DE PRONTO:
 
 ### Critérios de aceite
 - [ ] Arquivo `tests/ai/extract-json.test.ts` existe
-- [ ] Contém os 11 `it` listados em specs/02 §9 (extract-json.test.ts)
+- [ ] Contém os 11 `it` listados em docs/specs/02 §9 (extract-json.test.ts)
 - [ ] `pnpm test tests/ai/extract-json.test.ts` falha em 11 testes (red — função ainda não existe)
 - [ ] Importa `extractJson` de `../../src/ai/extract-json` (mesmo que ainda não exista — vai falhar no import)
 
@@ -604,7 +604,7 @@ TIPO: TDD-Test
 
 LEITURA OBRIGATÓRIA:
 1. plan.md (inteiro)
-2. specs/02-parte-b-pipeline-ia.md, seção 9 (lista de testes — bloco extract-json.test.ts)
+2. docs/specs/02-parte-b-pipeline-ia.md, seção 9 (lista de testes — bloco extract-json.test.ts)
 3. ROADMAP, seção 8.2 (estratégia de extração)
 
 OBJETIVO:
@@ -711,9 +711,9 @@ REPORTE:
 
 ---
 
-## 13. Checklist — `todo.md` está pronto pra começar?
+## 13. Checklist — `docs/todo.md` está pronto pra começar?
 
-Antes de iniciar a execução do `todo.md`, valide:
+Antes de iniciar a execução do `docs/todo.md`, valide:
 
 - [ ] Sprint 0.5 está fechada e specs estão atualizadas.
 - [ ] Toda task tem ID único `T-NNN`.

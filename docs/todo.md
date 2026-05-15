@@ -1,6 +1,6 @@
 # Todo — Botfinancas
 
-> **Workflow:** diga "continuar" para executar a próxima task `[ ]`. Ver `plan.md §11.5`.
+> **Workflow:** diga "continuar" para executar a próxima task `[ ]`. Ver `docs/plan.md §11.5`.
 > **Marcadores:** `[ ]` não iniciado · `[*]` em desenvolvimento · `[x]` concluído
 
 ---
@@ -163,7 +163,7 @@ Criar/sobrescrever o arquivo `current-state.md` na raiz do projeto com:
 - `src/app/page.tsx`, `src/app/layout.tsx` (esqueleto mínimo)
 
 ### Arquivos proibidos de tocar
-- `prisma/`, `shared/`, `specs/`, `plan.md`, `todo.md`
+- `prisma/`, `shared/`, `specs/`, `docs/plan.md`, `todo.md`
 
 ### Critérios de aceite
 - [ ] `package.json` declara `next@^14`, `typescript@^5`, `@types/node`, `@types/react`
@@ -180,8 +180,8 @@ TAREFA: T-001 — Inicializar repositório Next.js 14 + TypeScript strict
 SPRINT: S-0 | TIPO: Setup
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9 (regras de execução)
-2. specs/00-contratos-compartilhados.md §1 (stack base) e §6 (estrutura de diretórios)
+1. docs/plan.md §9 (regras de execução)
+2. docs/specs/00-contratos-compartilhados.md §1 (stack base) e §6 (estrutura de diretórios)
 
 OBJETIVO:
 Criar o esqueleto Next.js 14 + TypeScript do projeto, sem qualquer feature, pronto para receber as tasks seguintes.
@@ -189,7 +189,7 @@ Criar o esqueleto Next.js 14 + TypeScript do projeto, sem qualquer feature, pron
 ESCOPO:
 - Rodar: pnpm create next-app . --typescript --app --src-dir --import-alias "@/*" (sem --no-eslint, sem --no-tailwind a não ser que o template force)
 - Remover todo conteúdo de demonstração do create-next-app (globals.css de demonstração, conteúdo de page.tsx, etc.)
-- Ajustar tsconfig.json conforme specs/00 §1: strict=true, noUncheckedIndexedAccess=true, target=ES2022, module=ESNext, moduleResolution=bundler
+- Ajustar tsconfig.json conforme docs/specs/00 §1: strict=true, noUncheckedIndexedAccess=true, target=ES2022, module=ESNext, moduleResolution=bundler
 - Ajustar .gitignore: Node, Next.js, Prisma, .env.local
 
 FORA DE ESCOPO:
@@ -202,7 +202,7 @@ ARQUIVOS PERMITIDOS:
 - eslint.config.mjs (ou .eslintrc.json), src/app/page.tsx, src/app/layout.tsx
 
 ARQUIVOS PROIBIDOS:
-- prisma/, shared/, specs/*, plan.md, todo.md — qualquer coisa não listada acima
+- prisma/, shared/, specs/*, docs/plan.md, todo.md — qualquer coisa não listada acima
 
 CRITÉRIOS DE ACEITE:
 - [ ] tsconfig.json com strict, noUncheckedIndexedAccess, target ES2022, module ESNext, moduleResolution bundler
@@ -232,7 +232,7 @@ GATILHOS PARA PARAR:
 
 ---
 
-## [ ] T-002: Instalar todas as dependências do projeto
+## [*] T-002: Instalar todas as dependências do projeto
 
 | Campo | Valor |
 |---|---|
@@ -262,8 +262,8 @@ TAREFA: T-002 — Instalar dependências
 SPRINT: S-0 | TIPO: Setup
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9
-2. specs/00 §1 (stack), specs/01 §3 (stack Parte A), specs/02 §3 (stack Parte B)
+1. docs/plan.md §9
+2. docs/specs/00 §1 (stack), docs/specs/01 §3 (stack Parte A), docs/specs/02 §3 (stack Parte B)
 
 OBJETIVO:
 Instalar todas as dependências listadas nas specs em uma única passagem, sem instalar nada extra.
@@ -322,7 +322,7 @@ GATILHOS PARA PARAR: conflito de versões irresolvível; Tempo > 30min.
 
 ### Critérios de aceite
 - [ ] `vitest.config.ts` na raiz com `globals: true`, `setupFiles: ['./tests/setup.ts']`, `environment: 'node'`, `pool: 'forks'`, `poolOptions: { forks: { singleFork: true } }`, `testTimeout: 15_000`
-- [ ] `tests/setup.ts` implementado exatamente conforme specs/00 §7 (beforeAll migrate, beforeEach truncate, afterAll disconnect)
+- [ ] `tests/setup.ts` implementado exatamente conforme docs/specs/00 §7 (beforeAll migrate, beforeEach truncate, afterAll disconnect)
 - [ ] `pnpm test` roda sem erro (sem testes ainda, apenas setup)
 
 ### Prompt pronto para execução
@@ -332,15 +332,15 @@ TAREFA: T-003 — Configurar Vitest + tests/setup.ts
 SPRINT: S-0 | TIPO: Setup
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9
-2. specs/00 §7 (Setup de testes — ler INTEIRO, copiar exatamente)
+1. docs/plan.md §9
+2. docs/specs/00 §7 (Setup de testes — ler INTEIRO, copiar exatamente)
 
 OBJETIVO:
-Criar vitest.config.ts e tests/setup.ts exatamente conforme specs/00 §7, sem modificar nada além desses dois arquivos.
+Criar vitest.config.ts e tests/setup.ts exatamente conforme docs/specs/00 §7, sem modificar nada além desses dois arquivos.
 
 ESCOPO:
-- Criar vitest.config.ts na raiz com as opções exatas de specs/00 §7
-- Criar tests/setup.ts com o conteúdo exato de specs/00 §7 (beforeAll/beforeEach/afterAll)
+- Criar vitest.config.ts na raiz com as opções exatas de docs/specs/00 §7
+- Criar tests/setup.ts com o conteúdo exato de docs/specs/00 §7 (beforeAll/beforeEach/afterAll)
 - O tests/setup.ts usa TEST_DATABASE_URL (não DATABASE_URL)
 
 FORA DE ESCOPO:
@@ -352,7 +352,7 @@ ARQUIVOS PERMITIDOS: vitest.config.ts, tests/setup.ts
 ARQUIVOS PROIBIDOS: tudo mais
 
 CRITÉRIOS DE ACEITE:
-- [ ] vitest.config.ts existe com todas as opções de specs/00 §7
+- [ ] vitest.config.ts existe com todas as opções de docs/specs/00 §7
 - [ ] tests/setup.ts existe com beforeAll/beforeEach/afterAll corretos
 - [ ] pnpm test roda sem erro (0 testes, mas setup executa sem crash)
 
@@ -391,10 +391,10 @@ GATILHOS PARA PARAR: TEST_DATABASE_URL não está definida (orientar humano a cr
 - `.env.example` (apenas DATABASE_URL e TEST_DATABASE_URL, resto em T-007)
 
 ### Arquivos proibidos de tocar
-- `shared/`, `src/`, `specs/`, `plan.md`, `todo.md`
+- `shared/`, `src/`, `specs/`, `docs/plan.md`, `todo.md`
 
 ### Critérios de aceite
-- [ ] `prisma/schema.prisma` contém todos os models de specs/00 §2: User, Contact, Account, Invoice, InvoicePayment, Category, Transaction, SharedSplit, SplitSettlement, RecurringExpense, Budget, Reminder, MessageLog, AiInference, MemoryEntry
+- [ ] `prisma/schema.prisma` contém todos os models de docs/specs/00 §2: User, Contact, Account, Invoice, InvoicePayment, Category, Transaction, SharedSplit, SplitSettlement, RecurringExpense, Budget, Reminder, MessageLog, AiInference, MemoryEntry
 - [ ] Todos os enums presentes: AccountType, InvoiceStatus, TransactionType, TransactionDirection, TransactionSource, TransactionStatus, SplitStatus, RecurringPeriod, BudgetPeriod, ReminderType, ReminderStatus, MessageType, CategoryType, InferenceStatus
 - [ ] `pnpm prisma migrate dev --name init` aplica sem erro no banco de dev
 - [ ] `pnpm prisma generate` gera o client sem erro
@@ -406,15 +406,15 @@ TAREFA: T-004 — Criar prisma/schema.prisma + migration inicial
 SPRINT: S-0 | TIPO: Setup
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9
-2. specs/00 §2 (Schema do banco — ler INTEIRO, copiar exatamente)
-3. specs/00 §5 (variáveis de ambiente — apenas DATABASE_URL e TEST_DATABASE_URL)
+1. docs/plan.md §9
+2. docs/specs/00 §2 (Schema do banco — ler INTEIRO, copiar exatamente)
+3. docs/specs/00 §5 (variáveis de ambiente — apenas DATABASE_URL e TEST_DATABASE_URL)
 
 OBJETIVO:
-Criar o schema Prisma completo conforme specs/00 §2, incluindo todos os modelos, relações, índices e enums. Rodar a migration inicial.
+Criar o schema Prisma completo conforme docs/specs/00 §2, incluindo todos os modelos, relações, índices e enums. Rodar a migration inicial.
 
 ESCOPO:
-- Criar prisma/schema.prisma copiando EXATAMENTE o schema de specs/00 §2
+- Criar prisma/schema.prisma copiando EXATAMENTE o schema de docs/specs/00 §2
 - Adicionar DATABASE_URL ao .env.example (apenas essa linha, se o arquivo não existir)
 - Rodar: pnpm prisma migrate dev --name init (banco local deve estar rodando)
 - Rodar: pnpm prisma generate
@@ -422,13 +422,13 @@ ESCOPO:
 FORA DE ESCOPO:
 - NÃO criar seed
 - NÃO modificar nada fora de prisma/ e .env.example
-- NÃO inventar campos que não estão no schema de specs/00 §2
+- NÃO inventar campos que não estão no schema de docs/specs/00 §2
 
 ARQUIVOS PERMITIDOS: prisma/schema.prisma, prisma/migrations/**, .env.example
-ARQUIVOS PROIBIDOS: src/**, shared/**, specs/*, plan.md, todo.md
+ARQUIVOS PROIBIDOS: src/**, shared/**, specs/*, docs/plan.md, todo.md
 
 CRITÉRIOS DE ACEITE:
-- [ ] Todos os 15 models e 14 enums de specs/00 §2 presentes
+- [ ] Todos os 15 models e 14 enums de docs/specs/00 §2 presentes
 - [ ] pnpm prisma migrate dev --name init sem erro
 - [ ] pnpm prisma generate sem erro
 
@@ -479,15 +479,15 @@ TAREFA: T-005 — Criar shared/contract.ts
 SPRINT: S-0 | TIPO: Setup
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9
-2. specs/00 §3 (Contrato processMessage — copiar EXATAMENTE)
+1. docs/plan.md §9
+2. docs/specs/00 §3 (Contrato processMessage — copiar EXATAMENTE)
 
 OBJETIVO:
-Criar shared/contract.ts copiando exatamente o conteúdo de specs/00 §3. Nenhuma modificação.
+Criar shared/contract.ts copiando exatamente o conteúdo de docs/specs/00 §3. Nenhuma modificação.
 
 ESCOPO:
 - mkdir shared/ se não existir
-- Criar shared/contract.ts com o conteúdo de specs/00 §3
+- Criar shared/contract.ts com o conteúdo de docs/specs/00 §3
 
 FORA DE ESCOPO:
 - NÃO modificar o contrato
@@ -545,7 +545,7 @@ GATILHOS PARA PARAR: erro de compilação TypeScript que indica problema no cont
 
 ### Critérios de aceite
 - [ ] 9 arquivos JSON em `shared/fixtures/` com os nomes exatos acima
-- [ ] Cada arquivo segue a estrutura de specs/00 §4: `name`, `input`, `llmRawResponse`, `expected`
+- [ ] Cada arquivo segue a estrutura de docs/specs/00 §4: `name`, `input`, `llmRawResponse`, `expected`
 - [ ] `currentDate` = `"2026-05-13"` em todas as fixtures
 - [ ] `llmRawResponse` é string JSON serializado (não objeto)
 - [ ] `llm_invalid_json.llmRawResponse` = string que não é JSON válido
@@ -559,17 +559,17 @@ TAREFA: T-006 — Criar shared/fixtures/*.json (9 fixtures MVP)
 SPRINT: S-0 | TIPO: Setup
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9
-2. specs/00 §4 (Fixtures compartilhadas — INTEIRO, incluindo estrutura e tabela de fixtures obrigatórias)
-3. specs/02 §6 (Schema Zod da saída do LLM — para saber o formato de llmRawResponse)
+1. docs/plan.md §9
+2. docs/specs/00 §4 (Fixtures compartilhadas — INTEIRO, incluindo estrutura e tabela de fixtures obrigatórias)
+3. docs/specs/02 §6 (Schema Zod da saída do LLM — para saber o formato de llmRawResponse)
 
 OBJETIVO:
-Criar as 9 fixtures JSON do MVP em shared/fixtures/, seguindo a estrutura e convenções de specs/00 §4.
+Criar as 9 fixtures JSON do MVP em shared/fixtures/, seguindo a estrutura e convenções de docs/specs/00 §4.
 
 ESCOPO:
 - Criar shared/fixtures/ se não existir
 - Criar os 9 arquivos listados, cada um com: name, input (text + currentDate), llmRawResponse (string), expected
-- llmRawResponse deve ser uma string JSON serializada (JSON.stringify de um objeto com os campos do LlmTransactionSchema ou LlmQuerySchema de specs/02 §6)
+- llmRawResponse deve ser uma string JSON serializada (JSON.stringify de um objeto com os campos do LlmTransactionSchema ou LlmQuerySchema de docs/specs/02 §6)
 - currentDate = "2026-05-13" em todas
 - Para expense_simple: input.text = "Gastei 50 no mercado ontem", transactionDate = "2026-05-12", confidence = 0.92
 - Para income_salary: input.text = "Recebi 3000 de salario", type = "income", confidence = 0.95
@@ -627,7 +627,7 @@ GATILHOS PARA PARAR: dúvida sobre o valor de algum campo que possa impactar os 
 - `.gitignore` (apenas para garantir `.env.local` está ignorado)
 
 ### Critérios de aceite
-- [ ] `.env.example` contém todas as vars de specs/00 §5: DATABASE_URL, TEST_DATABASE_URL, TELEGRAM_BOT_TOKEN, TELEGRAM_WEBHOOK_SECRET, TELEGRAM_ALLOWED_USER_IDS, OLLAMA_BASE_URL, OLLAMA_TEXT_MODEL, LOG_LEVEL, NODE_ENV
+- [ ] `.env.example` contém todas as vars de docs/specs/00 §5: DATABASE_URL, TEST_DATABASE_URL, TELEGRAM_BOT_TOKEN, TELEGRAM_WEBHOOK_SECRET, TELEGRAM_ALLOWED_USER_IDS, OLLAMA_BASE_URL, OLLAMA_TEXT_MODEL, LOG_LEVEL, NODE_ENV
 - [ ] `.env.local` está no `.gitignore`
 
 ### Prompt pronto para execução
@@ -637,17 +637,17 @@ TAREFA: T-007 — Criar .env.example
 SPRINT: S-0 | TIPO: Setup
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9
-2. specs/00 §5 (Variáveis de ambiente — copiar exatamente)
+1. docs/plan.md §9
+2. docs/specs/00 §5 (Variáveis de ambiente — copiar exatamente)
 
 OBJETIVO:
-Criar .env.example com todas as variáveis de specs/00 §5 e garantir que .env.local está no .gitignore.
+Criar .env.example com todas as variáveis de docs/specs/00 §5 e garantir que .env.local está no .gitignore.
 
 ARQUIVOS PERMITIDOS: .env.example, .gitignore
 ARQUIVOS PROIBIDOS: tudo mais
 
 CRITÉRIOS DE ACEITE:
-- [ ] .env.example com todas as 9 vars de specs/00 §5
+- [ ] .env.example com todas as 9 vars de docs/specs/00 §5
 - [ ] .env.local no .gitignore
 
 DEFINIÇÃO DE PRONTO:
@@ -697,7 +697,7 @@ TAREFA: T-008 — Review S-0
 SPRINT: S-0 | TIPO: Review
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9, §10, §11
+1. docs/plan.md §9, §10, §11
 
 OBJETIVO:
 Validar que todos os entregáveis de S-0 estão corretos e a sprint pode ser declarada fechada.
@@ -753,7 +753,7 @@ DEFINIÇÃO DE PRONTO:
 - `src/app/api/health/route.ts`
 
 ### Arquivos proibidos de tocar
-- `src/ai/`, `src/financial/`, `prompts/`, `prisma/schema.prisma`, `shared/`, `specs/`, `plan.md`, `todo.md`
+- `src/ai/`, `src/financial/`, `prompts/`, `prisma/schema.prisma`, `shared/`, `specs/`, `docs/plan.md`, `todo.md`
 
 ### Critérios de aceite
 - [ ] `GET /api/health` retorna 200 com body `{ "status": "ok" }`
@@ -766,14 +766,14 @@ TAREFA: T-009 — GET /api/health
 SPRINT: S-1 | TIPO: Setup
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9
-2. specs/01 §4 (estrutura de arquivos — apenas a parte de health/)
+1. docs/plan.md §9
+2. docs/specs/01 §4 (estrutura de arquivos — apenas a parte de health/)
 
 OBJETIVO:
 Criar src/app/api/health/route.ts que retorna { "status": "ok" } com HTTP 200. Sem TDD.
 
 ARQUIVOS PERMITIDOS: src/app/api/health/route.ts
-ARQUIVOS PROIBIDOS: src/ai/**, src/financial/**, prompts/**, prisma/schema.prisma, shared/**, specs/*, plan.md, todo.md
+ARQUIVOS PROIBIDOS: src/ai/**, src/financial/**, prompts/**, prisma/schema.prisma, shared/**, specs/*, docs/plan.md, todo.md
 
 CRITÉRIOS DE ACEITE:
 - [ ] GET /api/health retorna 200 com { status: "ok" }
@@ -811,7 +811,7 @@ DEFINIÇÃO DE PRONTO:
 - `src/lib/logger.ts`
 
 ### Arquivos proibidos de tocar
-- `src/ai/`, `src/financial/`, `prompts/`, `prisma/schema.prisma`, `shared/`, `specs/`, `plan.md`, `todo.md`
+- `src/ai/`, `src/financial/`, `prompts/`, `prisma/schema.prisma`, `shared/`, `specs/`, `docs/plan.md`, `todo.md`
 
 ### Critérios de aceite
 - [ ] `src/lib/prisma.ts`: singleton PrismaClient com hot-reload guard (global var)
@@ -825,8 +825,8 @@ TAREFA: T-010 — src/lib/prisma.ts + src/lib/logger.ts
 SPRINT: S-1 | TIPO: Setup
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9
-2. specs/01 §8 (regras não-óbvias — item sobre singleton PrismaClient e logger)
+1. docs/plan.md §9
+2. docs/specs/01 §8 (regras não-óbvias — item sobre singleton PrismaClient e logger)
 
 OBJETIVO:
 Criar singleton do PrismaClient (evita múltiplas conexões em hot reload Next.js) e logger pino.
@@ -839,7 +839,7 @@ FORA DE ESCOPO:
 - NÃO criar src/lib/env.ts (será T-012/T-013)
 
 ARQUIVOS PERMITIDOS: src/lib/prisma.ts, src/lib/logger.ts
-ARQUIVOS PROIBIDOS: src/ai/**, src/financial/**, prompts/**, prisma/schema.prisma, shared/**, specs/*, plan.md, todo.md
+ARQUIVOS PROIBIDOS: src/ai/**, src/financial/**, prompts/**, prisma/schema.prisma, shared/**, specs/*, docs/plan.md, todo.md
 
 CRITÉRIOS DE ACEITE:
 - [ ] prisma.ts exporta PrismaClient singleton
@@ -880,7 +880,7 @@ DEFINIÇÃO DE PRONTO:
 - Todo o resto
 
 ### Critérios de aceite
-- [ ] `src/processor/stub.ts` exporta `stubProcessor: MessageProcessor` conforme specs/01 §5
+- [ ] `src/processor/stub.ts` exporta `stubProcessor: MessageProcessor` conforme docs/specs/01 §5
 - [ ] Importa tipos de `../../shared/contract`
 - [ ] Compila sem erro
 
@@ -891,17 +891,17 @@ TAREFA: T-011 — src/processor/stub.ts
 SPRINT: S-1 | TIPO: Setup
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9
-2. specs/01 §5 (Stub de processMessage — copiar EXATAMENTE)
+1. docs/plan.md §9
+2. docs/specs/01 §5 (Stub de processMessage — copiar EXATAMENTE)
 
 OBJETIVO:
-Criar src/processor/stub.ts copiando exatamente o conteúdo de specs/01 §5.
+Criar src/processor/stub.ts copiando exatamente o conteúdo de docs/specs/01 §5.
 
 ARQUIVOS PERMITIDOS: src/processor/stub.ts
 ARQUIVOS PROIBIDOS: tudo mais
 
 CRITÉRIOS DE ACEITE:
-- [ ] stubProcessor exportado conforme specs/01 §5
+- [ ] stubProcessor exportado conforme docs/specs/01 §5
 - [ ] tsc --noEmit sem erro
 
 DEFINIÇÃO DE PRONTO:
@@ -946,8 +946,8 @@ TAREFA: T-012 — TDD-Test env.ts
 SPRINT: S-1 | TIPO: TDD-Test
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9
-2. specs/00 §5 (vars de ambiente) e specs/01 §8 (regra: validação de env com Zod que falha no boot)
+1. docs/plan.md §9
+2. docs/specs/00 §5 (vars de ambiente) e docs/specs/01 §8 (regra: validação de env com Zod que falha no boot)
 
 OBJETIVO:
 Escrever testes para src/lib/env.ts que validem as env vars com Zod. Os testes DEVEM FALHAR ao final desta task.
@@ -1012,15 +1012,15 @@ TAREFA: T-013 — TDD-Impl env.ts
 SPRINT: S-1 | TIPO: TDD-Impl
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9 (especialmente R-5: quando teste falha, conserte código, não teste)
-2. specs/01 §8 (regra: validação Zod que falha no boot)
-3. specs/00 §5 (lista das vars de ambiente a validar)
+1. docs/plan.md §9 (especialmente R-5: quando teste falha, conserte código, não teste)
+2. docs/specs/01 §8 (regra: validação Zod que falha no boot)
+3. docs/specs/00 §5 (lista das vars de ambiente a validar)
 
 OBJETIVO:
 Implementar src/lib/env.ts com Zod para que todos os testes de tests/webhook/env.test.ts passem.
 
 ESCOPO:
-- Criar src/lib/env.ts: schema Zod para todas as vars de specs/00 §5; parse process.env; exportar objeto tipado; lançar erro descritivo se inválido
+- Criar src/lib/env.ts: schema Zod para todas as vars de docs/specs/00 §5; parse process.env; exportar objeto tipado; lançar erro descritivo se inválido
 - NÃO modificar os testes
 
 ABORDAGEM TDD:
@@ -1069,7 +1069,7 @@ DEFINIÇÃO DE PRONTO:
 - `src/webhook/auth.ts`, todo o resto
 
 ### Critérios de aceite
-- [ ] `tests/webhook/auth.test.ts` contém os 8 `it()` exatos de specs/01 §7 (bloco `auth.test.ts`)
+- [ ] `tests/webhook/auth.test.ts` contém os 8 `it()` exatos de docs/specs/01 §7 (bloco `auth.test.ts`)
 - [ ] `pnpm test tests/webhook/auth.test.ts` falha (red)
 
 ### Prompt pronto para execução
@@ -1079,12 +1079,12 @@ TAREFA: T-014 — TDD-Test auth.ts
 SPRINT: S-1 | TIPO: TDD-Test
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9
-2. specs/01 §7 (bloco tests/webhook/auth.test.ts — copiar os 8 it() exatos)
-3. specs/01 §8 (regras: fail closed para secret vazio e allowlist vazia)
+1. docs/plan.md §9
+2. docs/specs/01 §7 (bloco tests/webhook/auth.test.ts — copiar os 8 it() exatos)
+3. docs/specs/01 §8 (regras: fail closed para secret vazio e allowlist vazia)
 
 OBJETIVO:
-Escrever tests/webhook/auth.test.ts com os 8 testes de specs/01 §7. Os testes DEVEM FALHAR.
+Escrever tests/webhook/auth.test.ts com os 8 testes de docs/specs/01 §7. Os testes DEVEM FALHAR.
 
 ESCOPO:
 - Criar tests/webhook/auth.test.ts
@@ -1096,7 +1096,7 @@ ARQUIVOS PERMITIDOS: tests/webhook/auth.test.ts
 ARQUIVOS PROIBIDOS: src/webhook/auth.ts, tudo mais
 
 CRITÉRIOS DE ACEITE:
-- [ ] 8 it() dos dois describe() de specs/01 §7 presentes
+- [ ] 8 it() dos dois describe() de docs/specs/01 §7 presentes
 - [ ] pnpm test tests/webhook/auth.test.ts falha (red)
 
 DEFINIÇÃO DE PRONTO:
@@ -1139,9 +1139,9 @@ TAREFA: T-015 — TDD-Impl auth.ts
 SPRINT: S-1 | TIPO: TDD-Impl
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9
-2. specs/01 §7 (bloco auth.test.ts — para entender o comportamento esperado)
-3. specs/01 §8 (regras: fail closed, allowlist CSV)
+1. docs/plan.md §9
+2. docs/specs/01 §7 (bloco auth.test.ts — para entender o comportamento esperado)
+3. docs/specs/01 §8 (regras: fail closed, allowlist CSV)
 
 OBJETIVO:
 Implementar src/webhook/auth.ts para que todos os 8 testes de T-014 passem.
@@ -1198,8 +1198,8 @@ TAREFA: T-016 — TDD-Test telegram-payload.ts
 SPRINT: S-1 | TIPO: TDD-Test
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9
-2. specs/01 §4 (arquivo telegram-payload.ts — propósito)
+1. docs/plan.md §9
+2. docs/specs/01 §4 (arquivo telegram-payload.ts — propósito)
 
 OBJETIVO:
 Escrever testes para o schema Zod do payload de update do Telegram. Os testes DEVEM FALHAR.
@@ -1256,8 +1256,8 @@ TAREFA: T-017 — TDD-Impl telegram-payload.ts
 SPRINT: S-1 | TIPO: TDD-Impl
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9
-2. specs/01 §4 (arquivo telegram-payload.ts)
+1. docs/plan.md §9
+2. docs/specs/01 §4 (arquivo telegram-payload.ts)
 
 OBJETIVO:
 Implementar schema Zod do Update do Telegram para que todos os testes de T-016 passem.
@@ -1301,7 +1301,7 @@ DEFINIÇÃO DE PRONTO: Reporte arquivo criado e output green. NÃO faça commit.
 - `tests/webhook/normalize.test.ts`
 
 ### Critérios de aceite
-- [ ] Contém os 8 `it()` exatos de specs/01 §7 (bloco `normalize.test.ts`)
+- [ ] Contém os 8 `it()` exatos de docs/specs/01 §7 (bloco `normalize.test.ts`)
 - [ ] `pnpm test tests/webhook/normalize.test.ts` falha (red)
 
 ### Prompt pronto para execução
@@ -1311,17 +1311,17 @@ TAREFA: T-018 — TDD-Test normalize.ts
 SPRINT: S-1 | TIPO: TDD-Test
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9
-2. specs/01 §7 (bloco tests/webhook/normalize.test.ts — 8 it() exatos)
+1. docs/plan.md §9
+2. docs/specs/01 §7 (bloco tests/webhook/normalize.test.ts — 8 it() exatos)
 
 OBJETIVO:
-Escrever tests/webhook/normalize.test.ts com os 8 testes de specs/01 §7. DEVEM FALHAR.
+Escrever tests/webhook/normalize.test.ts com os 8 testes de docs/specs/01 §7. DEVEM FALHAR.
 
 ARQUIVOS PERMITIDOS: tests/webhook/normalize.test.ts
 ARQUIVOS PROIBIDOS: src/webhook/normalize.ts, tudo mais
 
 CRITÉRIOS DE ACEITE:
-- [ ] 8 it() de specs/01 §7 presentes com assertions concretas
+- [ ] 8 it() de docs/specs/01 §7 presentes com assertions concretas
 - [ ] pnpm test tests/webhook/normalize.test.ts falha (red)
 
 DEFINIÇÃO DE PRONTO: Reporte 8 testes e output red. NÃO faça commit. Pare.
@@ -1362,8 +1362,8 @@ TAREFA: T-019 — TDD-Impl normalize.ts
 SPRINT: S-1 | TIPO: TDD-Impl
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9
-2. specs/01 §7 (bloco normalize.test.ts — comportamento esperado)
+1. docs/plan.md §9
+2. docs/specs/01 §7 (bloco normalize.test.ts — comportamento esperado)
 
 OBJETIVO:
 Implementar normalizeTelegramUpdate que extrai messageType, normalizedText, chatId, telegramMessageId do payload do Telegram.
@@ -1412,8 +1412,8 @@ TAREFA: T-020 — TDD-Test reply.ts
 SPRINT: S-1 | TIPO: TDD-Test
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9
-2. specs/01 §8 (regra: mock fetch com vi.spyOn(globalThis, 'fetch'), não usar MSW)
+1. docs/plan.md §9
+2. docs/specs/01 §8 (regra: mock fetch com vi.spyOn(globalThis, 'fetch'), não usar MSW)
 
 OBJETIVO:
 Escrever testes para sendMessage do Telegram (cliente HTTP). DEVEM FALHAR.
@@ -1467,8 +1467,8 @@ TAREFA: T-021 — TDD-Impl reply.ts
 SPRINT: S-1 | TIPO: TDD-Impl
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9
-2. specs/01 §8 (apenas sendMessage via fetch)
+1. docs/plan.md §9
+2. docs/specs/01 §8 (apenas sendMessage via fetch)
 
 OBJETIVO:
 Implementar sendMessage(chatId, text) que chama a API do Telegram. Apenas fetch, sem SDK.
@@ -1514,7 +1514,7 @@ DEFINIÇÃO DE PRONTO: Reporte arquivo e output green. NÃO faça commit. Pare.
 - `src/app/api/webhooks/telegram/route.ts`, todo o resto
 
 ### Critérios de aceite
-- [ ] Contém os 14 `it()` exatos de specs/01 §7 (bloco `route.test.ts`)
+- [ ] Contém os 14 `it()` exatos de docs/specs/01 §7 (bloco `route.test.ts`)
 - [ ] Usa banco de teste real (TEST_DATABASE_URL)
 - [ ] `pnpm test tests/webhook/route.test.ts` falha (red)
 
@@ -1525,25 +1525,25 @@ TAREFA: T-022 — TDD-Test POST /api/webhooks/telegram
 SPRINT: S-1 | TIPO: TDD-Test
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9
-2. specs/01 §7 (bloco route.test.ts — 14 it() exatos)
-3. specs/01 §8 (regras: sempre 200 ao Telegram exceto 401 de auth; persistir MessageLog antes de processMessage)
+1. docs/plan.md §9
+2. docs/specs/01 §7 (bloco route.test.ts — 14 it() exatos)
+3. docs/specs/01 §8 (regras: sempre 200 ao Telegram exceto 401 de auth; persistir MessageLog antes de processMessage)
 
 OBJETIVO:
-Escrever tests/webhook/route.test.ts com os 14 testes de specs/01 §7. Os testes DEVEM FALHAR. Usa banco de teste real.
+Escrever tests/webhook/route.test.ts com os 14 testes de docs/specs/01 §7. Os testes DEVEM FALHAR. Usa banco de teste real.
 
 ESCOPO:
 - Criar tests/webhook/route.test.ts
 - Usar o prisma exportado de tests/setup.ts para verificar estado do banco
 - Mockar fetch global (para o reply.ts não chamar Telegram de verdade)
 - Importar handler de src/app/api/webhooks/telegram/route (não existe — red)
-- Os 14 it() de specs/01 §7 com assertions concretas
+- Os 14 it() de docs/specs/01 §7 com assertions concretas
 
 ARQUIVOS PERMITIDOS: tests/webhook/route.test.ts
 ARQUIVOS PROIBIDOS: src/app/api/webhooks/telegram/route.ts, tudo mais
 
 CRITÉRIOS DE ACEITE:
-- [ ] 14 it() de specs/01 §7 presentes com assertions concretas
+- [ ] 14 it() de docs/specs/01 §7 presentes com assertions concretas
 - [ ] pnpm test tests/webhook/route.test.ts falha (red)
 
 DEFINIÇÃO DE PRONTO: Reporte 14 testes e output red. NÃO faça commit. Pare.
@@ -1584,9 +1584,9 @@ TAREFA: T-023 — TDD-Impl route.ts
 SPRINT: S-1 | TIPO: TDD-Impl
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9 (especialmente R-5, R-9)
-2. specs/01 §7 (bloco route.test.ts — comportamento esperado)
-3. specs/01 §8 (INTEIRO — todas as regras não-óbvias)
+1. docs/plan.md §9 (especialmente R-5, R-9)
+2. docs/specs/01 §7 (bloco route.test.ts — comportamento esperado)
+3. docs/specs/01 §8 (INTEIRO — todas as regras não-óbvias)
 
 OBJETIVO:
 Implementar a rota POST que orquestra: validação de secret, allowlist, persistência de MessageLog, criação de User, chamada ao processMessage (stub), reply ao Telegram.
@@ -1634,7 +1634,7 @@ DEFINIÇÃO DE PRONTO: Reporte arquivo criado e output green. NÃO faça commit.
 - `tests/integration/webhook-end-to-end.test.ts`
 
 ### Critérios de aceite
-- [ ] Contém os 2 `it()` de specs/01 §7 (bloco `webhook-end-to-end.test.ts`)
+- [ ] Contém os 2 `it()` de docs/specs/01 §7 (bloco `webhook-end-to-end.test.ts`)
 - [ ] Testes passam (green) — o handler já existe após T-023
 - [ ] `pnpm test` 100% verde
 
@@ -1645,8 +1645,8 @@ TAREFA: T-024 — tests/integration/webhook-end-to-end.test.ts
 SPRINT: S-1 | TIPO: TDD-Test
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9
-2. specs/01 §7 (bloco webhook-end-to-end.test.ts — 2 it() exatos)
+1. docs/plan.md §9
+2. docs/specs/01 §7 (bloco webhook-end-to-end.test.ts — 2 it() exatos)
 
 OBJETIVO:
 Criar teste de integração end-to-end que exercita o fluxo completo: POST webhook → MessageLog persistido → stub responde → reply enviado. Os testes DEVEM PASSAR (o handler já existe).
@@ -1661,7 +1661,7 @@ ARQUIVOS PERMITIDOS: tests/integration/webhook-end-to-end.test.ts
 ARQUIVOS PROIBIDOS: qualquer arquivo de src/, tudo mais
 
 CRITÉRIOS DE ACEITE:
-- [ ] 2 it() de specs/01 §7 presentes e passando (green)
+- [ ] 2 it() de docs/specs/01 §7 presentes e passando (green)
 - [ ] pnpm test 100% verde
 
 DEFINIÇÃO DE PRONTO: Reporte testes e output green. NÃO faça commit. Pare.
@@ -1847,8 +1847,8 @@ TAREFA: T-028 — README Parte A
 SPRINT: S-1 | TIPO: Doc
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9
-2. specs/01 §9 (Critérios de aceite — último item sobre README)
+1. docs/plan.md §9
+2. docs/specs/01 §9 (Critérios de aceite — último item sobre README)
 
 OBJETIVO:
 Criar README.md documentando o setup completo da Parte A.
@@ -1912,8 +1912,8 @@ TAREFA: T-029 — Review S-1
 SPRINT: S-1 | TIPO: Review
 
 LEITURA OBRIGATÓRIA:
-1. plan.md §9, §10, §11
-2. specs/01 §9 (Critérios de aceite da sprint inteira)
+1. docs/plan.md §9, §10, §11
+2. docs/specs/01 §9 (Critérios de aceite da sprint inteira)
 
 OBJETIVO:
 Validar que todos os entregáveis de S-1 estão corretos.
@@ -2098,7 +2098,7 @@ TASK: T-032 TDD-Test schemas.ts
 ARQUIVO: src/ai/schemas.test.ts (criar)
 
 SCHEMA A VALIDAR (Zod): LlmTransactionSchema
-Campos esperados (baseado em specs/02 §4):
+Campos esperados (baseado em docs/specs/02 §4):
 - type: "expense" | "income" | "transfer"
 - amount: number positivo
 - description: string (min 1)
@@ -3294,7 +3294,7 @@ ARQUIVO: src/financial/processor.ts (criar)
 Implementar processMessage(message: string, userId: string, llm: LlmClient): Promise<ProcessResult>
 Fazer passar src/financial/processor.test.ts.
 
-REGRA CRÍTICA (specs/02 §10):
+REGRA CRÍTICA (docs/specs/02 §10):
 Toda criação de Transaction com invoiceId DEVE usar prisma.$transaction([
   prisma.transaction.create({...}),
   prisma.invoice.update({ where: { id: invoiceId }, data: { totalAmount: { increment: amount } } })
@@ -3806,7 +3806,7 @@ Deploy em produção (Vercel ou VPS), configuração de variáveis de ambiente, 
 
 | ID | Descrição | Specs envolvidas | Status |
 |---|---|---|---|
-| C-1 | **Resolvido:** `Invoice.totalAmount` não tinha regra de atualização atômica | specs/00 §2, specs/02 §10 | Corrigido nas duas specs |
+| C-1 | **Resolvido:** `Invoice.totalAmount` não tinha regra de atualização atômica | docs/specs/00 §2, docs/specs/02 §10 | Corrigido nas duas specs |
 
 ---
 
