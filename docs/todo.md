@@ -14,7 +14,16 @@
 | S-2 | T-030 – T-054 (25 tasks) | T-008 (paralela a S-1) | ~10h20min |
 | S-3 | T-055 – T-058 (4 tasks) | T-029 + T-054 | ~1h45min |
 | **MVP total (S-0 a S-3)** | **58 tasks** | — | **~26h10min** |
-| S-4 a S-12 | T-059 – T-067 (9 placeholders) | Placeholder — ver cada task | sem estimativa |
+| S-4 | T-068 – T-075 (8 tasks) | T-058 | ~2h30min |
+| S-5 | T-076 – T-081 (6 tasks) | T-075 | ~2h |
+| S-6 | T-082 – T-085 (4 tasks) | T-081 | ~1h30min |
+| S-7 | T-086 – T-093 (8 tasks) | T-085 | ~3h |
+| S-8 | T-094 – T-100 (7 tasks) | T-093 | ~4h |
+| S-9 | T-101 – T-105 (5 tasks) | T-100 | ~2h30min |
+| S-10 | T-106 – T-112 (7 tasks) | T-100 | ~2h |
+| S-11 | T-113 – T-119 (7 tasks) | T-093 | ~3h |
+| S-12 | T-120 – T-126 (7 tasks) | T-119 | ~3h |
+| **Pós-MVP total (S-4 a S-12)** | **59 tasks** | — | **~23h30min** |
 
 > **Tradução prática do MVP:**
 > - **Otimista (sem retrabalho):** ~26h ≈ 3 dias úteis a 8h/dia
@@ -72,13 +81,86 @@
 | 3.3 | T-057 (smoke) | 15min |
 | 3.4 | T-058 (review final) | 30min |
 
+### Sprint S-4 — Consultas via NLP (~2h30min, quase tudo sequencial)
+| Onda | Tasks | Tempo |
+|---|---|---|
+| 4.1 | T-068 \|\| T-069 (paralelo: prompt setup + test queries) | 25min |
+| 4.2 | T-070 (impl queries) | 25min |
+| 4.3 | T-071 → T-072 → T-073 (handler + wire) | 65min |
+| 4.4 | T-074 (integration) | 20min |
+| 4.5 | T-075 (review) | 15min |
+
+### Sprint S-5 — InvoicePayment atômico (~2h, sequencial após S-4)
+| Onda | Tasks | Tempo |
+|---|---|---|
+| 5.1 | T-076 → T-077 (TDD payInvoice) | 50min |
+| 5.2 | T-078 (prompt + schema) | 15min |
+| 5.3 | T-079 → T-080 (TDD processor detect) | 50min |
+| 5.4 | T-081 (review) | 15min |
+
+### Sprint S-6 — Multi-user (~1h30min)
+| Onda | Tasks | Tempo |
+|---|---|---|
+| 6.1 | T-082 \|\| T-083 (testes paralelos) | 25min |
+| 6.2 | T-084 (auditoria) | 20min |
+| 6.3 | T-085 (review) | 10min |
+
+### Sprint S-7 — Recurring (~3h)
+| Onda | Tasks | Tempo |
+|---|---|---|
+| 7.1 | T-086 → T-087 (recurring-service) | 50min |
+| 7.2 | T-088 (prompt + schema) | 15min |
+| 7.3 | T-089 → T-090 (processor handler) | 50min |
+| 7.4 | T-091 → T-092 (reminder job) | 55min |
+| 7.5 | T-093 (review) | 15min |
+
+### Sprint S-8 — Dashboard web (~4h)
+| Onda | Tasks | Tempo |
+|---|---|---|
+| 8.1 | T-094 (layout setup) | 30min |
+| 8.2 | T-095 \|\| T-096 \|\| T-097 \|\| T-098 (4 pages paralelas) | 50min |
+| 8.3 | T-099 (shared components) | 30min |
+| 8.4 | T-100 (review) | 20min |
+
+### Sprint S-9 — Auth web (~2h30min — requer humano)
+| Onda | Tasks | Tempo |
+|---|---|---|
+| 9.1 | T-101 (NextAuth setup, manual OAuth) | 40min |
+| 9.2 | T-102 → T-103 → T-104 (sequencial) | 110min |
+| 9.3 | T-105 (review) | 15min |
+
+### Sprint S-10 — Exportação (~2h)
+| Onda | Tasks | Tempo |
+|---|---|---|
+| 10.1 | (T-106 → T-107) \|\| (T-108 → T-109) | 35min |
+| 10.2 | T-110 (endpoints) | 30min |
+| 10.3 | T-111 (UI buttons) | 20min |
+| 10.4 | T-112 (review) | 10min |
+
+### Sprint S-11 — Notificações (~3h)
+| Onda | Tasks | Tempo |
+|---|---|---|
+| 11.1 | T-113 → T-114 (reminder-service) | 50min |
+| 11.2 | T-115 → T-116 (reminder-sender) | 50min |
+| 11.3 | T-117 \|\| T-118 (2 crons paralelos) | 40min |
+| 11.4 | T-119 (review) | 15min |
+
+### Sprint S-12 — Deploy + Obs (~3h — requer humano)
+| Onda | Tasks | Tempo |
+|---|---|---|
+| 12.1 | T-120 (manual: criar contas + deploy inicial) | 60min |
+| 12.2 | T-121 → T-122 (health) | 45min |
+| 12.3 | T-123 \|\| T-124 (Sentry + pino) | 30min |
+| 12.4 | T-125 (smoke prod) | 30min |
+| 12.5 | T-126 (review final) | 20min |
+
 ### Resumo de tempo
 
-| Cenário | Tempo total | Economia |
-|---|---|---|
-| Sequencial puro (1 task por vez) | ~26h10min | — |
-| **Critical path com paralelismo total** | **~11h30min** | **-56%** |
-| Realista (2–3 frentes simultâneas + overhead) | ~16h | -38% |
+| Cenário | MVP (S-0..S-3) | Pós-MVP (S-4..S-12) | Total |
+|---|---|---|---|
+| Sequencial puro (1 task por vez) | ~26h10min | ~23h30min | ~49h40min |
+| **Critical path com paralelismo total** | **~11h30min** | **~17h** | **~28h30min** |
+| Realista (×1.5 + manuais) | ~16h | ~26h | ~42h |
 
 ---
 
@@ -3645,160 +3727,1673 @@ DEFINIÇÃO DE PRONTO:
 
 ---
 
-## Sprints S-4 a S-12 — Placeholders
+## Sprint S-4 — Consultas via NLP (queries do usuário)
+
+**Objetivo:** quando o usuário pergunta "quanto gastei?", "qual meu saldo?", "mostra meus últimos gastos" — o bot interpreta via LLM, executa a query no Postgres e responde com texto formatado.
 
 ---
 
-## [ ] T-059: Placeholder S-4 — Relatórios e consultas
+## [x] T-068: Setup — Prompt template query-extraction.v1.md
 
 | Campo | Valor |
 |---|---|
 | **Sprint** | S-4 |
 | **Camada** | Parte B |
-| **Tipo** | Placeholder |
+| **Tipo** | Setup |
 | **Depende de** | T-058 |
+| **Estimativa** | ~15min |
+| **Pode rodar em paralelo com** | T-069, T-076 |
 
-### Descrição
-Sprint S-4 não detalhada ainda. Objetivo: implementar respostas a queries do usuário (saldo, extrato, resumo por categoria). Detalhar quando S-3 estiver aprovado.
+### Arquivos permitidos para criar/editar
+- `src/ai/prompts/query-extraction.v1.md` (criar)
+
+### Arquivos proibidos de tocar
+- Tudo o resto
+
+### Critérios de aceite
+- [x] Prompt PT-BR few-shot instruindo LLM a retornar `LlmQuerySchema` JSON
+- [x] Placeholders: `{{USER_MESSAGE}}`, `{{TODAY}}`, `{{MONTH_START}}`, `{{MONTH_END}}`
+- [x] Exemplos: balance, expense_by_category, recent_transactions
+
+### Prompt para Opus
+```
+TASK: T-068 Prompt query-extraction v1
+ARQUIVO: src/ai/prompts/query-extraction.v1.md
+INSTRUI o LLM a classificar a pergunta em queryType ∈ {balance, expense_by_category, recent_transactions, unknown}
++ inferir period {from,to} e category quando explícitos.
+Placeholders: USER_MESSAGE, TODAY, MONTH_START, MONTH_END.
+3 few-shot examples cobrindo cada queryType útil.
+```
+
+### Checklist de fechamento
+- [x] Commit `T-068: prompt query-extraction v1`
+- [x] Esta task marcada `[x]`
 
 ### Notas de execução
-(detalhar antes de iniciar)
+Feito junto de T-069/T-070 (queries.ts) no commit `72ba1f6`.
 
 ---
 
-## [ ] T-060: Placeholder S-5 — InvoicePayment e paidAmount atômico
+## [x] T-069: [TDD-Test] queries.ts — sumByPeriod, listByCategory, listRecent, computeBalance
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-4 |
+| **Camada** | Parte B |
+| **Tipo** | TDD-Test |
+| **Depende de** | T-058 |
+| **Estimativa** | ~25min |
+| **Pode rodar em paralelo com** | T-068, T-076 |
+
+### Arquivos permitidos para criar/editar
+- `tests/financial/queries.test.ts` (criar)
+
+### Arquivos proibidos de tocar
+- `src/financial/queries.ts` (não existe ainda)
+
+### Critérios de aceite
+- [x] Testa sumByPeriod (expense, income, sem período, sem dados)
+- [x] Testa listByCategory (com período, vazio)
+- [x] Testa listRecent (ordem desc, respeito ao limit)
+- [x] Testa computeBalance (income, expense, net)
+- [x] Banco real, vermelho confirmado
+
+### Prompt para Opus
+```
+TASK: T-069 TDD-Test queries.ts
+ARQUIVO: tests/financial/queries.test.ts
+FUNÇÕES A TESTAR (importar de src/financial/queries):
+- sumByPeriod(prisma, userId, type, from?, to?) → number
+- listByCategory(prisma, userId, type, from?, to?) → {categoryName, total, count}[]
+- listRecent(prisma, userId, limit) → TransactionWithCategory[]
+- computeBalance(prisma, userId, from?, to?) → {income, expense, net}
+SEED por beforeEach: User + 2 Categories + 5 Transactions (4 maio + 1 abril).
+NÃO criar queries.ts. Vermelho ao final.
+```
+
+### Checklist de fechamento
+- [x] Commit `T-069: test queries vermelho`
+- [x] Esta task marcada `[x]`
+
+### Notas de execução
+Feito junto de T-068/T-070 no commit `72ba1f6`.
+
+---
+
+## [x] T-070: [TDD-Impl] queries.ts — implementação
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-4 |
+| **Camada** | Parte B |
+| **Tipo** | TDD-Impl |
+| **Depende de** | T-069 |
+| **Estimativa** | ~25min |
+| **Pode rodar em paralelo com** | nenhuma |
+
+### Arquivos permitidos para criar/editar
+- `src/financial/queries.ts` (criar)
+
+### Arquivos proibidos de tocar
+- `tests/financial/queries.test.ts`
+
+### Critérios de aceite
+- [x] Todos os 10 testes de T-069 verdes
+- [x] Usa `prisma.transaction.aggregate` e `groupBy`
+- [x] Sem `any`
+
+### Prompt para Opus
+```
+TASK: T-070 TDD-Impl queries.ts
+ARQUIVO: src/financial/queries.ts
+Implementar as 4 funções para passar tests/financial/queries.test.ts.
+Sem `any`. Decimal do Prisma → `Number(...)` no retorno.
+```
+
+### Checklist de fechamento
+- [x] `pnpm test queries` verde
+- [x] `pnpm lint` limpo
+- [x] Commit `T-070: impl queries verde`
+- [x] Esta task marcada `[x]`
+
+### Notas de execução
+Commit `72ba1f6`.
+
+---
+
+## [x] T-071: [TDD-Test] query-handler.ts — handleQuery
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-4 |
+| **Camada** | Parte B |
+| **Tipo** | TDD-Test |
+| **Depende de** | T-068, T-070 |
+| **Estimativa** | ~25min |
+| **Pode rodar em paralelo com** | nenhuma |
+
+### Arquivos permitidos para criar/editar
+- `tests/financial/query-handler.test.ts` (criar)
+
+### Arquivos proibidos de tocar
+- `src/financial/query-handler.ts` (não existe ainda)
+
+### Critérios de aceite
+- [x] Testa balance com período → reply contém "Receitas", "Despesas", "Saldo"
+- [x] Testa expense_by_category com category filter
+- [x] Testa recent_transactions
+- [x] Testa queryType=unknown → fallback friendly
+- [x] Testa LLM retorna intent errado → fallback friendly
+
+### Prompt para Opus
+```
+TASK: T-071 TDD-Test query-handler.ts
+ARQUIVO: tests/financial/query-handler.test.ts
+FUNÇÃO A TESTAR: handleQuery(message, userId, llm: LlmClient): Promise<string>
+Usar FakeLlmClient com payloads pré-definidos (LlmQuery JSONs).
+Banco real para queries.ts.
+```
+
+### Checklist de fechamento
+- [x] Commit `T-071: test query-handler vermelho`
+- [x] Esta task marcada `[x]`
+
+### Notas de execução
+Feito junto de T-072 no commit `4559450`.
+
+---
+
+## [x] T-072: [TDD-Impl] query-handler.ts — implementação
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-4 |
+| **Camada** | Parte B |
+| **Tipo** | TDD-Impl |
+| **Depende de** | T-071 |
+| **Estimativa** | ~30min |
+| **Pode rodar em paralelo com** | nenhuma |
+
+### Arquivos permitidos para criar/editar
+- `src/financial/query-handler.ts` (criar)
+
+### Arquivos proibidos de tocar
+- `tests/financial/query-handler.test.ts`
+
+### Critérios de aceite
+- [x] Resolve timezone do usuário (date-fns-tz)
+- [x] Carrega prompt com TODAY/MONTH_START/MONTH_END/USER_MESSAGE
+- [x] Chama parseAiResponse → LlmQuery
+- [x] Dispatch por queryType → queries.ts
+- [x] Formata reply em texto (português + emojis)
+- [x] Catch genérico → FALLBACK string
+
+### Prompt para Opus
+```
+TASK: T-072 TDD-Impl query-handler.ts
+ARQUIVO: src/financial/query-handler.ts
+Implementar handleQuery passando tests.
+Resolver período "esse mês" a partir do timezone do User.
+```
+
+### Checklist de fechamento
+- [x] `pnpm test query-handler` verde
+- [x] Commit `T-072: impl query-handler verde`
+- [x] Esta task marcada `[x]`
+
+### Notas de execução
+Commit `4559450`.
+
+---
+
+## [x] T-073: Refactor — wire handleQuery em processor.ts
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-4 |
+| **Camada** | Parte B |
+| **Tipo** | Refactor |
+| **Depende de** | T-072 |
+| **Estimativa** | ~10min |
+| **Pode rodar em paralelo com** | nenhuma |
+
+### Arquivos permitidos para criar/editar
+- `src/financial/processor.ts` (editar)
+
+### Arquivos proibidos de tocar
+- Testes
+
+### Critérios de aceite
+- [x] `if (intent === 'query')` chama `handleQuery(message, userId, llm)` e retorna o reply
+- [x] Testes existentes do processor seguem verdes
+
+### Prompt para Opus
+```
+TASK: T-073 Refactor processor.ts
+Trocar resposta canned por chamada a handleQuery.
+```
+
+### Checklist de fechamento
+- [x] Suite completa verde
+- [x] Commit `T-073: wire query-handler em processor`
+- [x] Esta task marcada `[x]`
+
+### Notas de execução
+Feito junto de T-072 no commit `4559450`.
+
+---
+
+## [x] T-074: [TDD-Test] integration test query-flow E2E
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-4 |
+| **Camada** | Compartilhado |
+| **Tipo** | TDD-Test |
+| **Depende de** | T-073 |
+| **Estimativa** | ~20min |
+| **Pode rodar em paralelo com** | nenhuma |
+
+### Arquivos permitidos para criar/editar
+- `tests/integration/query-flow.integration.test.ts` (criar)
+
+### Arquivos proibidos de tocar
+- Tudo o resto
+
+### Critérios de aceite
+- [x] Webhook → LLM mock (queryType=balance) → DB query → sendMessage com totais corretos
+- [x] Usa `vi.hoisted` para fila do mock de OllamaLlmClient
+
+### Prompt para Opus
+```
+TASK: T-074 Integration test query-flow
+ARQUIVO: tests/integration/query-flow.integration.test.ts
+Setup: User + Category + 2 Transactions seedadas.
+LLM mock retorna {intent:'query', queryType:'balance', period:...}.
+Verifica fetch de sendMessage contém "Receitas", valor e saldo.
+```
+
+### Checklist de fechamento
+- [x] Commit `T-074: integration test query-flow verde`
+- [x] Esta task marcada `[x]`
+
+### Notas de execução
+Commit `cf77fbf`.
+
+---
+
+## [ ] T-075: Review S-4
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-4 |
+| **Camada** | Compartilhado |
+| **Tipo** | Review |
+| **Depende de** | T-074 |
+| **Estimativa** | ~15min |
+| **Pode rodar em paralelo com** | nenhuma |
+
+### Arquivos permitidos para criar/editar
+- Nenhum (read-only)
+
+### Critérios de aceite
+- [ ] Suite completa verde
+- [ ] `pnpm lint` limpo
+- [ ] `pnpm build` limpo
+- [ ] Nenhum `any` em src/financial/queries.ts, query-handler.ts
+- [ ] Smoke test manual: enviar "quanto gastei esse mês?" no Telegram → resposta correta
+
+### Prompt para Opus
+```
+TASK: T-075 Review S-4
+MODO: read-only
+Reporte checklist.
+```
+
+### Checklist de fechamento
+- [ ] Commit `T-075: review S-4 aprovada`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## Sprint S-5 — InvoicePayment atômico
+
+**Objetivo:** quando o usuário envia "paguei 500 da fatura do Nubank", o bot cria `Transaction` (transfer) + `InvoicePayment` + atualiza `Invoice.paidAmount` numa única `prisma.$transaction`.
+
+---
+
+## [x] T-076: [TDD-Test] invoice-payment.ts — payInvoice
 
 | Campo | Valor |
 |---|---|
 | **Sprint** | S-5 |
 | **Camada** | Parte A |
-| **Tipo** | Placeholder |
+| **Tipo** | TDD-Test |
 | **Depende de** | T-058 |
+| **Estimativa** | ~25min |
+| **Pode rodar em paralelo com** | T-068 (S-4 paralela) |
 
-### Descrição
-Implementar criação de InvoicePayment com incremento atômico de `Invoice.paidAmount` via `prisma.$transaction`. Mesma regra de atomicidade aplicada em T-052 para totalAmount. Detalhar quando S-4 estiver aprovado.
+### Arquivos permitidos para criar/editar
+- `tests/financial/invoice-payment.test.ts` (criar)
+
+### Arquivos proibidos de tocar
+- `src/financial/invoice-payment.ts`
+
+### Critérios de aceite
+- [x] Pagamento total → paidAmount = totalAmount, status=paid
+- [x] Pagamento parcial → status=partial
+- [x] Múltiplos parciais acumulam corretamente
+- [x] Invoice inexistente → throw
+- [x] Invoice de outro user → throw
+
+### Prompt para Opus
+```
+TASK: T-076 TDD-Test invoice-payment
+ARQUIVO: tests/financial/invoice-payment.test.ts
+FUNÇÃO: payInvoice(prisma, userId, invoiceId, amount, options?) → {transaction, invoicePayment, invoice}
+Seed por beforeEach: User + 2 Accounts (card + checking) + Invoice(totalAmount=500).
+```
+
+### Checklist de fechamento
+- [x] Commit `T-076: test invoice-payment vermelho`
+- [x] Esta task marcada `[x]`
 
 ### Notas de execução
-(detalhar antes de iniciar)
+Feito junto de T-077 no commit `5adf2e2`.
 
 ---
 
-## [ ] T-061: Placeholder S-6 — Múltiplos usuários e isolamento
+## [x] T-077: [TDD-Impl] invoice-payment.ts — implementação
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-5 |
+| **Camada** | Parte A |
+| **Tipo** | TDD-Impl |
+| **Depende de** | T-076 |
+| **Estimativa** | ~25min |
+| **Pode rodar em paralelo com** | nenhuma |
+
+### Arquivos permitidos para criar/editar
+- `src/financial/invoice-payment.ts` (criar)
+
+### Arquivos proibidos de tocar
+- `tests/financial/invoice-payment.test.ts`
+
+### Critérios de aceite
+- [x] Usa `prisma.$transaction` para Transaction + InvoicePayment + Invoice.paidAmount
+- [x] Calcula nextStatus (paid/partial)
+- [x] Sem `any`
+
+### Prompt para Opus
+```
+TASK: T-077 TDD-Impl invoice-payment
+ARQUIVO: src/financial/invoice-payment.ts
+Implementar payInvoice passando tests.
+prisma.$transaction(async (tx) => { tx.transaction.create + tx.invoicePayment.create + tx.invoice.update }).
+```
+
+### Checklist de fechamento
+- [x] `pnpm test invoice-payment` verde
+- [x] Commit `T-077: impl invoice-payment verde`
+- [x] Esta task marcada `[x]`
+
+### Notas de execução
+Commit `5adf2e2`.
+
+---
+
+## [ ] T-078: Setup — Prompt invoice-payment-detection.v1.md
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-5 |
+| **Camada** | Parte B |
+| **Tipo** | Setup |
+| **Depende de** | T-077 |
+| **Estimativa** | ~15min |
+| **Pode rodar em paralelo com** | nenhuma |
+
+### Arquivos permitidos para criar/editar
+- `src/ai/prompts/transaction-extraction.v1.md` (editar — adicionar campo isInvoicePayment) **OU** criar `transaction-extraction.v2.md`
+
+### Arquivos proibidos de tocar
+- Tudo o resto
+
+### Critérios de aceite
+- [ ] Prompt instrui LLM a marcar `isInvoicePayment: true` quando a mensagem fala em pagar fatura/boleto de cartão
+- [ ] Atualizar `LlmTransactionSchema` com `isInvoicePayment: z.boolean().optional()`
+- [ ] Atualizar todos os testes que usam o schema
+
+### Prompt para Opus
+```
+TASK: T-078 Prompt invoice-payment detection
+Decisão: estender prompt v1 (campo opcional) OU criar v2.
+Recomendado: estender v1 + adicionar campo opcional em LlmTransactionSchema.
+Atualizar:
+- src/ai/prompts/transaction-extraction.v1.md (instrução + 1 exemplo)
+- src/ai/schemas.ts: isInvoicePayment: z.boolean().optional()
+Garantir que tests existentes seguem verdes (campo opcional).
+```
+
+### Checklist de fechamento
+- [ ] Suite completa verde
+- [ ] Commit `T-078: prompt detecta invoice payment`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-079: [TDD-Test] processor detecta invoice payment
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-5 |
+| **Camada** | Parte B |
+| **Tipo** | TDD-Test |
+| **Depende de** | T-078 |
+| **Estimativa** | ~25min |
+| **Pode rodar em paralelo com** | nenhuma |
+
+### Arquivos permitidos para criar/editar
+- `tests/financial/processor.test.ts` (editar — adicionar casos)
+
+### Arquivos proibidos de tocar
+- `src/financial/processor.ts`
+
+### Critérios de aceite
+- [ ] Mensagem "paguei 500 da fatura do Nubank" + LLM mock com isInvoicePayment=true → chama payInvoice em vez de criar Transaction simples
+- [ ] Invoice.paidAmount é atualizada
+- [ ] Se nenhuma invoice aberta encontrada → fallback para Transaction normal
+- [ ] Vermelho confirmado
+
+### Prompt para Opus
+```
+TASK: T-079 TDD-Test processor — invoice payment
+ARQUIVO: tests/financial/processor.test.ts (editar)
+NOVOS CASOS:
+- it: pagamento detectado + invoice aberta → chama payInvoice
+- it: pagamento detectado mas sem invoice aberta → cria Transaction normal
+Seedar Invoice no DB para testar.
+```
+
+### Checklist de fechamento
+- [ ] Vermelho confirmado (novos casos red, antigos green)
+- [ ] Commit `T-079: test processor invoice payment vermelho`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-080: [TDD-Impl] processor chama payInvoice quando detectado
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-5 |
+| **Camada** | Parte B |
+| **Tipo** | TDD-Impl |
+| **Depende de** | T-079 |
+| **Estimativa** | ~25min |
+| **Pode rodar em paralelo com** | nenhuma |
+
+### Arquivos permitidos para criar/editar
+- `src/financial/processor.ts` (editar)
+
+### Arquivos proibidos de tocar
+- Testes
+
+### Critérios de aceite
+- [ ] Quando `aiOutput.isInvoicePayment && encontrou invoice aberta` → `payInvoice(...)` em vez do flow normal
+- [ ] Reply menciona "Pagamento registrado"
+- [ ] Suite completa verde
+
+### Prompt para Opus
+```
+TASK: T-080 TDD-Impl processor invoice payment
+Detectar isInvoicePayment + paymentMethod → buscar Account credit_card → Invoice open → payInvoice.
+Fallback: se não encontrar Invoice → criar Transaction normal (flow atual).
+```
+
+### Checklist de fechamento
+- [ ] Verde
+- [ ] Commit `T-080: impl processor invoice payment verde`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-081: Review S-5
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-5 |
+| **Tipo** | Review |
+| **Depende de** | T-080 |
+| **Estimativa** | ~15min |
+
+### Critérios de aceite
+- [ ] Suite completa verde
+- [ ] `prisma.$transaction` confirmado em payInvoice
+- [ ] Smoke manual: enviar "paguei 500 da fatura do nubank" → totalAmount/paidAmount conferem
+
+### Checklist de fechamento
+- [ ] Commit `T-081: review S-5 aprovada`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## Sprint S-6 — Multi-usuário e isolamento
+
+**Objetivo:** garantir via testes que dados de dois usuários distintos NUNCA se misturam. Auditar todas as queries para confirmar filtro por `userId`.
+
+---
+
+## [ ] T-082: [TDD-Test] isolamento queries.ts (2 usuários)
 
 | Campo | Valor |
 |---|---|
 | **Sprint** | S-6 |
 | **Camada** | Compartilhado |
-| **Tipo** | Placeholder |
-| **Depende de** | T-060 |
+| **Tipo** | TDD-Test |
+| **Depende de** | T-081 |
+| **Estimativa** | ~25min |
+| **Pode rodar em paralelo com** | T-083 |
 
-### Descrição
-Garantir isolamento de dados por userId em todas as queries. Testes com dois usuários distintos. Detalhar quando S-5 estiver aprovado.
+### Arquivos permitidos para criar/editar
+- `tests/financial/isolation-queries.test.ts` (criar)
 
-### Notas de execução
-(detalhar antes de iniciar)
+### Critérios de aceite
+- [ ] Seed: User A + User B com 3 Transactions cada
+- [ ] sumByPeriod(prisma, A.id) NÃO inclui transações de B (e vice-versa)
+- [ ] listByCategory NÃO mistura categorias
+- [ ] listRecent NÃO mistura
+- [ ] computeBalance NÃO mistura
+- [ ] Vermelho? **N/A**: testes devem passar imediatamente porque o isolamento já existe; se falhar, é bug a corrigir
+
+### Prompt para Opus
+```
+TASK: T-082 isolamento queries (multi-user)
+ARQUIVO: tests/financial/isolation-queries.test.ts
+Seedar 2 Users com transações diferentes.
+Verificar que cada função em queries.ts retorna SOMENTE dados do user passado.
+```
+
+### Checklist de fechamento
+- [ ] Todos verdes (sem precisar mudar src/)
+- [ ] Commit `T-082: isolation tests queries verde`
+- [ ] Esta task marcada `[x]`
 
 ---
 
-## [ ] T-062: Placeholder S-7 — Recurring transactions
+## [ ] T-083: [TDD-Test] isolamento processor.ts/route.ts (webhook)
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-6 |
+| **Camada** | Compartilhado |
+| **Tipo** | TDD-Test |
+| **Depende de** | T-081 |
+| **Estimativa** | ~25min |
+| **Pode rodar em paralelo com** | T-082 |
+
+### Arquivos permitidos para criar/editar
+- `tests/integration/isolation-webhook.integration.test.ts` (criar)
+
+### Critérios de aceite
+- [ ] Dois telegramUserIds distintos enviam mensagens
+- [ ] Cada User só vê suas próprias Transactions/Categories
+- [ ] Allowlist com múltiplos IDs funciona
+
+### Prompt para Opus
+```
+TASK: T-083 isolamento webhook
+ARQUIVO: tests/integration/isolation-webhook.integration.test.ts
+TELEGRAM_ALLOWED_USER_IDS = "111,222"
+Enviar mensagens via POST com from.id 111 e 222 separadamente.
+Verificar Transactions criadas com userIds corretos.
+```
+
+### Checklist de fechamento
+- [ ] Commit `T-083: isolation webhook verde`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-084: Auditoria — grep por queries sem userId
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-6 |
+| **Camada** | Compartilhado |
+| **Tipo** | Manual/Docs |
+| **Depende de** | T-083 |
+| **Estimativa** | ~20min |
+
+### Arquivos permitidos para criar/editar
+- `docs/multi-user-audit.md` (criar)
+
+### Critérios de aceite
+- [ ] Tabela: cada `prisma.*.findMany/findFirst/update/delete` em src/ — onde está, filtro por userId? (sim/não/justificativa)
+- [ ] Lista de exceções (ex.: webhook upsert por telegramUserId é seguro)
+
+### Prompt para Opus
+```
+TASK: T-084 audit multi-user
+grep -rn "prisma\." src/ | analisar cada chamada.
+Documentar em docs/multi-user-audit.md.
+```
+
+### Checklist de fechamento
+- [ ] Doc criada
+- [ ] Commit `T-084: audit multi-user`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-085: Review S-6
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-6 |
+| **Tipo** | Review |
+| **Depende de** | T-084 |
+| **Estimativa** | ~10min |
+
+### Checklist de fechamento
+- [ ] Suite verde
+- [ ] Audit doc revisada sem lacunas
+- [ ] Commit `T-085: review S-6 aprovada`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## Sprint S-7 — Transações recorrentes
+
+**Objetivo:** suportar "todo dia 5 pago aluguel de 1500" — o bot cria um `RecurringExpense` e, todo mês, gera `Reminder` quando o dia esperado passa sem registro.
+
+---
+
+## [ ] T-086: [TDD-Test] recurring-service.ts — CRUD
 
 | Campo | Valor |
 |---|---|
 | **Sprint** | S-7 |
 | **Camada** | Parte A |
-| **Tipo** | Placeholder |
-| **Depende de** | T-061 |
+| **Tipo** | TDD-Test |
+| **Depende de** | T-085 |
+| **Estimativa** | ~25min |
+| **Pode rodar em paralelo com** | nenhuma |
 
-### Descrição
-Suporte a transações recorrentes (campo `isRecurring`, `recurrenceRule`). Detalhar quando S-6 estiver aprovado.
+### Arquivos permitidos para criar/editar
+- `tests/financial/recurring-service.test.ts` (criar)
 
-### Notas de execução
-(detalhar antes de iniciar)
+### Critérios de aceite
+- [ ] createRecurring (CRUD básico)
+- [ ] listRecurring por user
+- [ ] updateRecurring (toggle active)
+- [ ] findDueToday(userId, today) → recorrentes cujo expectedDay == today
+
+### Prompt para Opus
+```
+TASK: T-086 TDD-Test recurring-service
+FUNÇÕES:
+- createRecurring(prisma, data) → RecurringExpense
+- listRecurring(prisma, userId) → RecurringExpense[]
+- toggleActive(prisma, id, active) → RecurringExpense
+- findDueOn(prisma, userId, dayOfMonth) → RecurringExpense[]
+Seedar 3 recorrentes.
+```
+
+### Checklist de fechamento
+- [ ] Vermelho confirmado
+- [ ] Commit `T-086: test recurring-service vermelho`
+- [ ] Esta task marcada `[x]`
 
 ---
 
-## [ ] T-063: Placeholder S-8 — Dashboard web
+## [ ] T-087: [TDD-Impl] recurring-service.ts
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-7 |
+| **Tipo** | TDD-Impl |
+| **Depende de** | T-086 |
+| **Estimativa** | ~25min |
+
+### Arquivos permitidos para criar/editar
+- `src/financial/recurring-service.ts` (criar)
+
+### Critérios de aceite
+- [ ] Testes T-086 verdes
+- [ ] Sem `any`
+
+### Checklist de fechamento
+- [ ] Commit `T-087: impl recurring-service verde`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-088: Setup — Prompt recurring-extraction.v1.md
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-7 |
+| **Tipo** | Setup |
+| **Depende de** | T-087 |
+| **Estimativa** | ~15min |
+
+### Arquivos permitidos para criar/editar
+- `src/ai/prompts/recurring-extraction.v1.md` (criar)
+- `src/ai/schemas.ts` (editar — adicionar LlmRecurringSchema)
+
+### Critérios de aceite
+- [ ] Prompt extrai: name, expectedAmount, periodicity (monthly/weekly/yearly), expectedDay, category
+- [ ] Schema Zod (LlmRecurringSchema) na união discriminated com intent="create_recurring"
+
+### Checklist de fechamento
+- [ ] Suite passa com novo schema
+- [ ] Commit `T-088: prompt + schema recurring`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-089: [TDD-Test] processor cria recorrente
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-7 |
+| **Tipo** | TDD-Test |
+| **Depende de** | T-088 |
+| **Estimativa** | ~25min |
+
+### Arquivos permitidos para criar/editar
+- `tests/financial/processor.test.ts` (editar — novos casos)
+
+### Critérios de aceite
+- [ ] Detecta intent="create_recurring" → cria via recurring-service
+- [ ] Reply confirma "Recorrente criada"
+
+### Checklist de fechamento
+- [ ] Vermelho confirmado
+- [ ] Commit `T-089: test processor recurring vermelho`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-090: [TDD-Impl] processor recurring handler
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-7 |
+| **Tipo** | TDD-Impl |
+| **Depende de** | T-089 |
+| **Estimativa** | ~25min |
+
+### Critérios de aceite
+- [ ] Adiciona detectIntent('create_recurring') a partir de palavras-chave ("todo dia X", "todo mês")
+- [ ] Branch no processor que chama recurring-service.createRecurring
+
+### Checklist de fechamento
+- [ ] Commit `T-090: impl processor recurring verde`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-091: [TDD-Test] reminder-recurring job
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-7 |
+| **Tipo** | TDD-Test |
+| **Depende de** | T-090 |
+| **Estimativa** | ~25min |
+
+### Arquivos permitidos para criar/editar
+- `tests/financial/reminder-recurring.test.ts` (criar)
+
+### Critérios de aceite
+- [ ] Para cada RecurringExpense active cujo expectedDay já passou neste mês sem Transaction correspondente → cria Reminder type=recurring_missing
+- [ ] Idempotente (não duplica Reminder no mesmo mês)
+
+### Checklist de fechamento
+- [ ] Vermelho
+- [ ] Commit `T-091: test reminder-recurring vermelho`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-092: [TDD-Impl] reminder-recurring.ts
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-7 |
+| **Tipo** | TDD-Impl |
+| **Depende de** | T-091 |
+| **Estimativa** | ~30min |
+
+### Critérios de aceite
+- [ ] Função `generateRecurringReminders(prisma, today)` retorna lista de Reminders criados
+- [ ] Tratar fuso horário de cada user
+
+### Checklist de fechamento
+- [ ] Commit `T-092: impl reminder-recurring verde`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-093: Review S-7
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-7 |
+| **Tipo** | Review |
+| **Depende de** | T-092 |
+| **Estimativa** | ~15min |
+
+### Checklist de fechamento
+- [ ] Suite verde
+- [ ] Smoke: "todo dia 5 pago aluguel 1500" → RecurringExpense criada
+- [ ] Commit `T-093: review S-7 aprovada`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## Sprint S-8 — Dashboard web
+
+**Objetivo:** interface web minimalista (Next.js App Router + Tailwind) com páginas /dashboard, /transactions, /categories, /invoices. Read-only no S-8 — edição vem depois.
+
+> **NOTA:** ler `node_modules/next/dist/docs/` antes de codar — Next.js neste projeto tem APIs específicas.
+
+---
+
+## [ ] T-094: Setup — layout base + nav + Tailwind config refresh
 
 | Campo | Valor |
 |---|---|
 | **Sprint** | S-8 |
 | **Camada** | Frontend |
-| **Tipo** | Placeholder |
-| **Depende de** | T-062 |
+| **Tipo** | Setup |
+| **Depende de** | T-093 |
+| **Estimativa** | ~30min |
 
-### Descrição
-Interface web para visualização de transações, saldo e faturas. Next.js 14 App Router + Tailwind. Detalhar quando S-7 estiver aprovado.
+### Arquivos permitidos para criar/editar
+- `src/app/layout.tsx` (editar)
+- `src/components/navigation.tsx` (criar)
+- `tailwind.config.ts` (editar se necessário)
 
-### Notas de execução
-(detalhar antes de iniciar)
+### Critérios de aceite
+- [ ] RootLayout com nav lateral (Dashboard, Transações, Categorias, Faturas)
+- [ ] Cores escuras (financeiro sério)
+- [ ] Tailwind utility classes funcionando
+
+### Checklist de fechamento
+- [ ] `pnpm dev` carrega a página `/` com layout
+- [ ] Commit `T-094: layout base + nav`
+- [ ] Esta task marcada `[x]`
 
 ---
 
-## [ ] T-064: Placeholder S-9 — Autenticação web
+## [ ] T-095: [TDD] page /dashboard — saldo + 5 últimas
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-8 |
+| **Tipo** | TDD-Test + Impl |
+| **Depende de** | T-094 |
+| **Estimativa** | ~45min |
+
+### Arquivos permitidos para criar/editar
+- `src/app/dashboard/page.tsx` (criar)
+- `tests/web/dashboard.test.tsx` (criar)
+
+### Critérios de aceite
+- [ ] Server component fetch direto via prisma
+- [ ] Mostra computeBalance + listRecent(5)
+- [ ] Teste com @testing-library/react (renderiza com dados seedados)
+
+### Prompt para Opus
+```
+TASK: T-095 page /dashboard
+PRECISA INSTALAR: @testing-library/react, jsdom (vitest env: jsdom).
+Página server component chamando queries.ts.
+Renderiza balance (Receitas/Despesas/Saldo) + lista 5 últimas.
+```
+
+### Checklist de fechamento
+- [ ] `pnpm test dashboard` verde
+- [ ] Page renderiza em `/dashboard`
+- [ ] Commit `T-095: page /dashboard`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-096: [TDD] page /transactions — lista + filtros
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-8 |
+| **Tipo** | TDD-Test + Impl |
+| **Depende de** | T-094 |
+| **Estimativa** | ~50min |
+
+### Arquivos permitidos para criar/editar
+- `src/app/transactions/page.tsx` (criar)
+- `src/components/transaction-list.tsx` (criar)
+- `tests/web/transactions.test.tsx` (criar)
+
+### Critérios de aceite
+- [ ] Lista paginada (20 por página)
+- [ ] Filtros: tipo, categoria, período (search params)
+- [ ] Teste com filtro aplicado
+
+### Checklist de fechamento
+- [ ] Commit `T-096: page /transactions`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-097: [TDD] page /categories — breakdown
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-8 |
+| **Tipo** | TDD-Test + Impl |
+| **Depende de** | T-094 |
+| **Estimativa** | ~35min |
+
+### Arquivos permitidos para criar/editar
+- `src/app/categories/page.tsx` (criar)
+- `tests/web/categories.test.tsx` (criar)
+
+### Critérios de aceite
+- [ ] Breakdown por categoria do mês atual (listByCategory)
+- [ ] Total geral + por categoria
+- [ ] Ordem decrescente por total
+
+### Checklist de fechamento
+- [ ] Commit `T-097: page /categories`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-098: [TDD] page /invoices — lista + status
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-8 |
+| **Tipo** | TDD-Test + Impl |
+| **Depende de** | T-094 |
+| **Estimativa** | ~40min |
+
+### Arquivos permitidos para criar/editar
+- `src/app/invoices/page.tsx` (criar)
+- `tests/web/invoices.test.tsx` (criar)
+
+### Critérios de aceite
+- [ ] Lista de Invoices por Account (credit_card)
+- [ ] Status com cor (open/partial/paid)
+- [ ] Mostra paidAmount / totalAmount + dueDate
+
+### Checklist de fechamento
+- [ ] Commit `T-098: page /invoices`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-099: [TDD] componentes compartilhados
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-8 |
+| **Tipo** | TDD-Test + Impl |
+| **Depende de** | T-095..T-098 |
+| **Estimativa** | ~30min |
+
+### Arquivos permitidos para criar/editar
+- `src/components/amount-badge.tsx` (criar — verde/vermelho)
+- `src/components/empty-state.tsx` (criar)
+- `tests/web/components.test.tsx` (criar)
+
+### Critérios de aceite
+- [ ] AmountBadge: positive (green), negative (red), neutral
+- [ ] EmptyState: ícone + mensagem
+- [ ] Usados pelas 4 pages
+
+### Checklist de fechamento
+- [ ] Commit `T-099: shared components`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-100: Review S-8
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-8 |
+| **Tipo** | Review |
+| **Depende de** | T-099 |
+| **Estimativa** | ~20min |
+
+### Checklist de fechamento
+- [ ] Suite verde (incluindo testes web)
+- [ ] `pnpm build` limpo (todas pages renderizam)
+- [ ] Smoke manual: abrir cada page no browser
+- [ ] Commit `T-100: review S-8 aprovada`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## Sprint S-9 — Autenticação web
+
+**Objetivo:** o usuário faz login no dashboard com Google, e essa conta web fica vinculada ao `telegramUserId` via código de verificação enviado pelo bot.
+
+> **REQUER AÇÃO MANUAL:** criar OAuth client no Google Cloud Console (link/setup será solicitado).
+
+---
+
+## [ ] T-101: Setup — NextAuth + Google provider
 
 | Campo | Valor |
 |---|---|
 | **Sprint** | S-9 |
 | **Camada** | Frontend |
-| **Tipo** | Placeholder |
-| **Depende de** | T-063 |
+| **Tipo** | Setup |
+| **Depende de** | T-100 |
+| **Estimativa** | ~40min |
 
-### Descrição
-Auth para o dashboard web (NextAuth ou Clerk). Vincular conta Telegram ao login web. Detalhar quando S-8 estiver aprovado.
+### Arquivos permitidos para criar/editar
+- `src/lib/auth.ts` (criar)
+- `src/app/api/auth/[...nextauth]/route.ts` (criar)
+- `prisma/schema.prisma` (editar — adicionar NextAuth tables)
+- `package.json` (instalar `next-auth`, `@auth/prisma-adapter`)
 
-### Notas de execução
-(detalhar antes de iniciar)
+### Critérios de aceite
+- [ ] NextAuth v5 com PrismaAdapter
+- [ ] Modelos Account, Session, VerificationToken adicionados ao schema (sem renomear nada existente)
+- [ ] Variáveis: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET
+- [ ] Migration aplicada
+
+### Prompt para Opus
+```
+TASK: T-101 NextAuth setup
+Instalar next-auth@beta + @auth/prisma-adapter.
+Adicionar models do schema sem conflitar com User existente (renomear se necessário ou usar @@map).
+Criar /api/auth/[...nextauth]/route.ts.
+```
+
+### Checklist de fechamento
+- [ ] Sign-in funciona via Google (teste manual)
+- [ ] Commit `T-101: NextAuth + Google provider`
+- [ ] Esta task marcada `[x]`
 
 ---
 
-## [ ] T-065: Placeholder S-10 — Exportação de dados
+## [ ] T-102: [TDD] middleware de auth em /dashboard/*
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-9 |
+| **Tipo** | TDD |
+| **Depende de** | T-101 |
+| **Estimativa** | ~30min |
+
+### Arquivos permitidos para criar/editar
+- `middleware.ts` (criar na raiz)
+- `tests/middleware/auth.test.ts` (criar)
+
+### Critérios de aceite
+- [ ] /dashboard/* redireciona pra /signin se não autenticado
+- [ ] /api/auth/* sempre acessível
+- [ ] /api/webhooks/* sempre acessível (Telegram não autentica via NextAuth)
+
+### Checklist de fechamento
+- [ ] Commit `T-102: middleware auth`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-103: Setup — fluxo de link Telegram ↔ Account
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-9 |
+| **Tipo** | Setup |
+| **Depende de** | T-102 |
+| **Estimativa** | ~30min |
+
+### Arquivos permitidos para criar/editar
+- `prisma/schema.prisma` (editar — adicionar User.linkedAccountId)
+- migration
+
+### Critérios de aceite
+- [ ] Campo `User.linkedAccountId` (NextAuth Account.id) nullable
+- [ ] Migration aplicada
+
+### Checklist de fechamento
+- [ ] Commit `T-103: schema linked account`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-104: [TDD] link-account service via código de verificação
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-9 |
+| **Tipo** | TDD |
+| **Depende de** | T-103 |
+| **Estimativa** | ~50min |
+
+### Arquivos permitidos para criar/editar
+- `src/financial/link-account.ts` (criar)
+- `tests/financial/link-account.test.ts` (criar)
+- `src/financial/processor.ts` (editar — comando "/vincular" gera código)
+- `src/app/dashboard/link/page.tsx` (criar — formulário para informar código)
+
+### Critérios de aceite
+- [ ] Usuário no Telegram: "/vincular" → bot responde com código de 6 dígitos válido por 10min
+- [ ] Usuário no dashboard: insere código → service valida e seta `User.linkedAccountId`
+- [ ] Código expirado → erro
+- [ ] Código já usado → erro
+
+### Checklist de fechamento
+- [ ] Commit `T-104: link-account verde`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-105: Review S-9
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-9 |
+| **Tipo** | Review |
+| **Depende de** | T-104 |
+| **Estimativa** | ~15min |
+
+### Checklist de fechamento
+- [ ] Smoke manual: login google + /vincular + código → conta vinculada
+- [ ] Commit `T-105: review S-9 aprovada`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## Sprint S-10 — Exportação CSV/PDF
+
+**Objetivo:** botão "Exportar" nas pages /transactions e /invoices que baixa CSV ou PDF do período visível.
+
+---
+
+## [ ] T-106: [TDD-Test] export-csv.ts
 
 | Campo | Valor |
 |---|---|
 | **Sprint** | S-10 |
-| **Camada** | Parte A |
-| **Tipo** | Placeholder |
-| **Depende de** | T-064 |
+| **Tipo** | TDD-Test |
+| **Depende de** | T-100 |
+| **Estimativa** | ~20min |
 
-### Descrição
-Exportar transações em CSV/PDF. Detalhar quando S-9 estiver aprovado.
+### Arquivos permitidos para criar/editar
+- `tests/financial/export-csv.test.ts` (criar)
 
-### Notas de execução
-(detalhar antes de iniciar)
+### Critérios de aceite
+- [ ] transactionsToCsv(transactions) → string CSV (header + rows)
+- [ ] Escape de vírgulas/aspas no description
+- [ ] Datas em yyyy-mm-dd
+
+### Checklist de fechamento
+- [ ] Commit `T-106: test export-csv vermelho`
+- [ ] Esta task marcada `[x]`
 
 ---
 
-## [ ] T-066: Placeholder S-11 — Notificações e lembretes
+## [ ] T-107: [TDD-Impl] export-csv.ts
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-10 |
+| **Tipo** | TDD-Impl |
+| **Depende de** | T-106 |
+| **Estimativa** | ~20min |
+
+### Critérios de aceite
+- [ ] Testes T-106 verdes
+- [ ] Sem deps externas (CSV é simples)
+
+### Checklist de fechamento
+- [ ] Commit `T-107: impl export-csv verde`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-108: [TDD-Test] export-pdf.ts
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-10 |
+| **Tipo** | TDD-Test |
+| **Depende de** | T-107 |
+| **Estimativa** | ~20min |
+
+### Arquivos permitidos para criar/editar
+- `tests/financial/export-pdf.test.ts` (criar)
+
+### Critérios de aceite
+- [ ] transactionsToPdf(transactions) → Buffer
+- [ ] PDF parseável (Buffer começa com %PDF)
+
+### Checklist de fechamento
+- [ ] Commit `T-108: test export-pdf vermelho`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-109: [TDD-Impl] export-pdf.ts (pdfkit)
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-10 |
+| **Tipo** | TDD-Impl |
+| **Depende de** | T-108 |
+| **Estimativa** | ~35min |
+
+### Critérios de aceite
+- [ ] Instalar `pdfkit` + `@types/pdfkit`
+- [ ] Implementar com header, tabela, totais
+
+### Checklist de fechamento
+- [ ] Commit `T-109: impl export-pdf verde`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-110: Endpoints /api/export/csv e /api/export/pdf
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-10 |
+| **Tipo** | TDD |
+| **Depende de** | T-109 |
+| **Estimativa** | ~30min |
+
+### Arquivos permitidos para criar/editar
+- `src/app/api/export/csv/route.ts` (criar)
+- `src/app/api/export/pdf/route.ts` (criar)
+- `tests/api/export.test.ts` (criar)
+
+### Critérios de aceite
+- [ ] GET com query params (from, to, type) → Response com Content-Type correto
+- [ ] Requer sessão autenticada (NextAuth)
+- [ ] Filtra por userId da sessão
+
+### Checklist de fechamento
+- [ ] Commit `T-110: endpoints export verde`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-111: UI buttons no dashboard
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-10 |
+| **Tipo** | Frontend |
+| **Depende de** | T-110 |
+| **Estimativa** | ~20min |
+
+### Arquivos permitidos para criar/editar
+- `src/components/export-buttons.tsx` (criar)
+- `src/app/transactions/page.tsx` (editar — adicionar buttons)
+
+### Critérios de aceite
+- [ ] Botões "Exportar CSV" / "Exportar PDF" dispara download
+
+### Checklist de fechamento
+- [ ] Commit `T-111: export buttons`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-112: Review S-10
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-10 |
+| **Tipo** | Review |
+| **Depende de** | T-111 |
+| **Estimativa** | ~10min |
+
+### Checklist de fechamento
+- [ ] Smoke manual: download CSV e PDF abrem corretamente
+- [ ] Commit `T-112: review S-10 aprovada`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## Sprint S-11 — Notificações e lembretes
+
+**Objetivo:** bot envia mensagens proativas: (a) lembrar gasto recorrente esquecido (S-7), (b) avisar vencimento de fatura 3 dias antes, (c) resumo semanal aos domingos.
+
+---
+
+## [ ] T-113: [TDD-Test] reminder-service.ts
 
 | Campo | Valor |
 |---|---|
 | **Sprint** | S-11 |
-| **Camada** | Parte B |
-| **Tipo** | Placeholder |
-| **Depende de** | T-065 |
+| **Tipo** | TDD-Test |
+| **Depende de** | T-093 |
+| **Estimativa** | ~25min |
 
-### Descrição
-Enviar notificações proativas via Telegram (vencimento de fatura, resumo semanal). Detalhar quando S-10 estiver aprovado.
+### Arquivos permitidos para criar/editar
+- `tests/financial/reminder-service.test.ts` (criar)
 
-### Notas de execução
-(detalhar antes de iniciar)
+### Critérios de aceite
+- [ ] createReminder, listPending(userId), markSent(id)
+- [ ] findDue(now) → Reminder[] cujo scheduledFor <= now AND status=pending
+
+### Checklist de fechamento
+- [ ] Commit `T-113: test reminder-service vermelho`
+- [ ] Esta task marcada `[x]`
 
 ---
 
-## [ ] T-067: Placeholder S-12 — Deploy e observabilidade
+## [ ] T-114: [TDD-Impl] reminder-service.ts
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-11 |
+| **Tipo** | TDD-Impl |
+| **Depende de** | T-113 |
+| **Estimativa** | ~25min |
+
+### Checklist de fechamento
+- [ ] Commit `T-114: impl reminder-service verde`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-115: [TDD-Test] reminder-sender.ts (envio via Telegram)
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-11 |
+| **Tipo** | TDD-Test |
+| **Depende de** | T-114 |
+| **Estimativa** | ~25min |
+
+### Arquivos permitidos para criar/editar
+- `tests/financial/reminder-sender.test.ts` (criar)
+
+### Critérios de aceite
+- [ ] sendReminder(reminder, user) chama sendMessage e marca enviado
+- [ ] Falha no Telegram → status="pending" mantido para retry
+
+### Checklist de fechamento
+- [ ] Commit `T-115: test reminder-sender vermelho`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-116: [TDD-Impl] reminder-sender.ts
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-11 |
+| **Tipo** | TDD-Impl |
+| **Depende de** | T-115 |
+| **Estimativa** | ~25min |
+
+### Checklist de fechamento
+- [ ] Commit `T-116: impl reminder-sender verde`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-117: cron — invoice-due-reminder.ts (3 dias antes)
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-11 |
+| **Tipo** | TDD |
+| **Depende de** | T-116 |
+| **Estimativa** | ~40min |
+
+### Arquivos permitidos para criar/editar
+- `src/jobs/invoice-due-reminder.ts` (criar)
+- `tests/jobs/invoice-due-reminder.test.ts` (criar)
+- `src/app/api/cron/invoice-due/route.ts` (criar)
+
+### Critérios de aceite
+- [ ] Job verifica Invoices com dueDate em [today, today+3] e status≠paid → cria Reminder
+- [ ] Endpoint /api/cron/invoice-due chamado por Vercel cron ou cron local
+- [ ] Auth via header secret (CRON_SECRET env var)
+
+### Checklist de fechamento
+- [ ] Commit `T-117: invoice-due-reminder cron`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-118: cron — weekly-summary.ts
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-11 |
+| **Tipo** | TDD |
+| **Depende de** | T-117 |
+| **Estimativa** | ~30min |
+
+### Arquivos permitidos para criar/editar
+- `src/jobs/weekly-summary.ts` (criar)
+- `tests/jobs/weekly-summary.test.ts` (criar)
+- `src/app/api/cron/weekly-summary/route.ts` (criar)
+
+### Critérios de aceite
+- [ ] Domingo às 20h → cria Reminder com resumo da semana (income, expense, net, top 3 categorias)
+- [ ] Para cada User do allowlist
+
+### Checklist de fechamento
+- [ ] Commit `T-118: weekly-summary cron`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-119: Review S-11
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-11 |
+| **Tipo** | Review |
+| **Depende de** | T-118 |
+| **Estimativa** | ~15min |
+
+### Checklist de fechamento
+- [ ] Smoke manual: rodar cron localmente, ver msg chegar no Telegram
+- [ ] Commit `T-119: review S-11 aprovada`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## Sprint S-12 — Deploy e observabilidade
+
+**Objetivo:** colocar em produção (sem mais depender de desktop ligado). Deploy do Next.js, Postgres gerenciado, Ollama continua no desktop acessado via Tailscale, observabilidade básica (Sentry + pino estruturado).
+
+> **REQUER AÇÃO MANUAL:** criar contas Vercel + Neon/Supabase + Sentry. Decisões a tomar antes de começar.
+
+---
+
+## [ ] T-120: Setup — Vercel + Postgres prod (Neon ou Supabase)
 
 | Campo | Valor |
 |---|---|
 | **Sprint** | S-12 |
 | **Camada** | Infra |
-| **Tipo** | Placeholder |
-| **Depende de** | T-066 |
+| **Tipo** | Manual + Setup |
+| **Depende de** | T-119 |
+| **Estimativa** | ~60min |
 
-### Descrição
-Deploy em produção (Vercel ou VPS), configuração de variáveis de ambiente, logging estruturado, alertas de erro. Detalhar quando S-11 estiver aprovado.
+### Arquivos permitidos para criar/editar
+- `vercel.json` (criar — config + cron)
+- `.env.production.example` (criar)
+- `docs/deploy.md` (criar — checklist)
 
-### Notas de execução
-(detalhar antes de iniciar)
+### Critérios de aceite
+- [ ] Projeto criado na Vercel apontando para o repo
+- [ ] Postgres prod criado (Neon free tier suficiente pra MVP)
+- [ ] DATABASE_URL prod configurada na Vercel
+- [ ] Migrations aplicadas no banco prod (`prisma migrate deploy`)
+- [ ] Build na Vercel passa
+- [ ] OLLAMA_BASE_URL apontando para Tailscale do desktop
+
+### Prompt para Opus
+```
+TASK: T-120 Deploy Vercel + Neon
+MODO: Sonnet conduz, humano cria contas.
+Sequência:
+1. Humano cria conta Vercel + import GitHub repo
+2. Humano cria Neon database
+3. Humano cola DATABASE_URL na Vercel + outras envs (TELEGRAM_*, OLLAMA_*)
+4. Sonnet escreve vercel.json com crons
+5. Humano dispara deploy
+6. Sonnet ajuda debugar build se falhar
+```
+
+### Checklist de fechamento
+- [ ] Webhook configurado para URL Vercel
+- [ ] Smoke: mensagem Telegram → resposta via prod
+- [ ] Commit `T-120: deploy prod inicial`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-121: [TDD-Test] health check robusto
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-12 |
+| **Tipo** | TDD-Test |
+| **Depende de** | T-120 |
+| **Estimativa** | ~20min |
+
+### Arquivos permitidos para criar/editar
+- `tests/api/health.test.ts` (criar)
+
+### Critérios de aceite
+- [ ] Health check verifica: DB conectado, Ollama responde, env vars presentes
+- [ ] Retorna { status, components: {db, llm, env}, latencyMs }
+
+### Checklist de fechamento
+- [ ] Commit `T-121: test health vermelho`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-122: [TDD-Impl] health check
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-12 |
+| **Tipo** | TDD-Impl |
+| **Depende de** | T-121 |
+| **Estimativa** | ~25min |
+
+### Arquivos permitidos para criar/editar
+- `src/app/api/health/route.ts` (editar)
+
+### Checklist de fechamento
+- [ ] Commit `T-122: impl health verde`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-123: Setup — integrar Sentry
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-12 |
+| **Tipo** | Setup |
+| **Depende de** | T-122 |
+| **Estimativa** | ~30min |
+
+### Arquivos permitidos para criar/editar
+- `sentry.server.config.ts` (criar)
+- `sentry.client.config.ts` (criar)
+- `instrumentation.ts` (criar/editar)
+
+### Critérios de aceite
+- [ ] Sentry SDK instalado (`@sentry/nextjs`)
+- [ ] DSN em env var
+- [ ] Captura errors do logger.error + uncaught
+- [ ] Smoke: gerar erro de propósito e ver no Sentry
+
+### Checklist de fechamento
+- [ ] Commit `T-123: integração Sentry`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-124: Setup — pino transport para arquivo + rotação
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-12 |
+| **Tipo** | Setup |
+| **Depende de** | T-123 |
+| **Estimativa** | ~25min |
+
+### Arquivos permitidos para criar/editar
+- `src/lib/logger.ts` (editar)
+
+### Critérios de aceite
+- [ ] Em produção: logs gravam em arquivo + stdout
+- [ ] Rotação: pino-roll ou similar (5MB por arquivo, mantém 5)
+- [ ] Em dev/test: mantém stdout legível
+
+### Checklist de fechamento
+- [ ] Commit `T-124: pino transport rotação`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-125: Smoke test em produção (manual)
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-12 |
+| **Tipo** | Manual |
+| **Depende de** | T-124 |
+| **Estimativa** | ~30min |
+
+### Critérios de aceite
+- [ ] Webhook URL atualizada para domínio Vercel
+- [ ] Telegram → mensagem → transação criada no DB prod
+- [ ] Dashboard `/dashboard` acessível com login
+- [ ] Sentry recebe um log de teste
+- [ ] Health check `/api/health` retorna 200 com tudo verde
+
+### Checklist de fechamento
+- [ ] Commit `T-125: smoke prod OK`
+- [ ] Esta task marcada `[x]`
+
+---
+
+## [ ] T-126: Review S-12 + go-live final
+
+| Campo | Valor |
+|---|---|
+| **Sprint** | S-12 |
+| **Tipo** | Review |
+| **Depende de** | T-125 |
+| **Estimativa** | ~20min |
+
+### Critérios de aceite
+- [ ] Suite verde
+- [ ] Build prod limpo
+- [ ] Documentação `docs/deploy.md` revisada
+- [ ] README atualizado com URL prod
+- [ ] Todas as variáveis de ambiente documentadas
+
+### Checklist de fechamento
+- [ ] Commit `T-126: review S-12 aprovada — go-live`
+- [ ] Esta task marcada `[x]`
 
 ---
 
