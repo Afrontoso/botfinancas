@@ -1677,7 +1677,7 @@ DEFINIÇÃO DE PRONTO: Reporte testes e output green. NÃO faça commit. Pare.
 
 ---
 
-## [ ] T-025: Manual — Criar bot no Telegram + configurar .env.local
+## [x] T-025: Manual — Criar bot no Telegram + configurar .env.local
 
 | Campo | Valor |
 |---|---|
@@ -1729,7 +1729,7 @@ Formate as instruções de forma clara e numerada. Pare após gerar as instruç�
 
 ---
 
-## [ ] T-026: Manual — Configurar túnel Tailscale Funnel
+## [x] T-026: Manual — Configurar túnel Tailscale Funnel
 
 | Campo | Valor |
 |---|---|
@@ -1775,7 +1775,7 @@ URL pública do funnel: ___________
 
 ---
 
-## [ ] T-027: Manual — Configurar webhook no Telegram
+## [x] T-027: Manual — Configurar webhook no Telegram
 
 | Campo | Valor |
 |---|---|
@@ -1882,7 +1882,7 @@ DEFINIÇÃO DE PRONTO: Reporte seções criadas. NÃO faça commit. Pare.
 
 ---
 
-## [ ] T-029: Review S-1
+## [x] T-029: Review S-1
 
 | Campo | Valor |
 |---|---|
