@@ -4285,7 +4285,7 @@ Fallback: se não encontrar Invoice → criar Transaction normal (flow atual).
 
 ---
 
-## [ ] T-082: [TDD-Test] isolamento queries.ts (2 usuários)
+## [x] T-082: [TDD-Test] isolamento queries.ts (2 usuários)
 
 | Campo | Valor |
 |---|---|
@@ -4322,7 +4322,7 @@ Verificar que cada função em queries.ts retorna SOMENTE dados do user passado.
 
 ---
 
-## [ ] T-083: [TDD-Test] isolamento processor.ts/route.ts (webhook)
+## [x] T-083: [TDD-Test] isolamento processor.ts/route.ts (webhook)
 
 | Campo | Valor |
 |---|---|
@@ -4356,7 +4356,7 @@ Verificar Transactions criadas com userIds corretos.
 
 ---
 
-## [ ] T-084: Auditoria — grep por queries sem userId
+## [x] T-084: Auditoria — grep por queries sem userId
 
 | Campo | Valor |
 |---|---|
@@ -4387,7 +4387,7 @@ Documentar em docs/multi-user-audit.md.
 
 ---
 
-## [ ] T-085: Review S-6
+## [x] T-085: Review S-6
 
 | Campo | Valor |
 |---|---|
