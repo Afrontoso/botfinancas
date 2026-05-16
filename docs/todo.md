@@ -2653,7 +2653,7 @@ Reportar verde. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-042: [TDD-Test] service.ts — orquestrar pipeline IA (real DB)
+## [x] T-042: [TDD-Test] service.ts — orquestrar pipeline IA (real DB)
 
 | Campo | Valor |
 |---|---|
@@ -2718,7 +2718,7 @@ Reportar casos e vermelho. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-043: [TDD-Impl] service.ts — implementação
+## [x] T-043: [TDD-Impl] service.ts — implementação
 
 | Campo | Valor |
 |---|---|
@@ -2948,7 +2948,7 @@ Mostrar conteúdo do arquivo criado. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-047: [TDD-Test] prompt-loader.ts — carregar e interpolar prompt
+## [x] T-047: [TDD-Test] prompt-loader.ts — carregar e interpolar prompt
 
 | Campo | Valor |
 |---|---|
@@ -3009,7 +3009,7 @@ Reportar casos e vermelho. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-048: [TDD-Impl] prompt-loader.ts — implementação
+## [x] T-048: [TDD-Impl] prompt-loader.ts — implementação
 
 | Campo | Valor |
 |---|---|
@@ -3056,7 +3056,7 @@ Reportar verde. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-049: [TDD-Test] llm-client.ts + fake-llm-client.ts — contrato e fake FIFO
+## [x] T-049: [TDD-Test] llm-client.ts + fake-llm-client.ts — contrato e fake FIFO
 
 | Campo | Valor |
 |---|---|
@@ -3131,7 +3131,7 @@ Reportar casos e vermelho. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-050: [TDD-Impl] llm-client.ts + fake-llm-client.ts — implementação
+## [x] T-050: [TDD-Impl] llm-client.ts + fake-llm-client.ts — implementação
 
 | Campo | Valor |
 |---|---|
@@ -3184,7 +3184,7 @@ Reportar verde. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-051: [TDD-Test] processor.ts — processar mensagem completo (real DB + FakeLlm)
+## [x] T-051: [TDD-Test] processor.ts — processar mensagem completo (real DB + FakeLlm)
 
 | Campo | Valor |
 |---|---|
@@ -3262,7 +3262,7 @@ Reportar casos e vermelho. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-052: [TDD-Impl] processor.ts — implementação real
+## [x] T-052: [TDD-Impl] processor.ts — implementação real
 
 | Campo | Valor |
 |---|---|
@@ -3321,7 +3321,7 @@ Reportar verde. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-053: README Parte B
+## [x] T-053: README Parte B
 
 | Campo | Valor |
 |---|---|
@@ -3375,7 +3375,7 @@ Mostrar conteúdo do README. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-054: Review S-2
+## [x] T-054: Review S-2
 
 | Campo | Valor |
 |---|---|
