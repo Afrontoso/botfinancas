@@ -5,6 +5,7 @@ import { loadPrompt } from '../ai/prompt-loader';
 import { parseAiResponse } from '../ai/service';
 import { findOrCreateCategory } from './categories';
 import { handleQuery } from './query-handler';
+import { payInvoice } from './invoice-payment';
 import { prisma } from '../lib/prisma';
 
 export type ProcessResult = {
@@ -43,6 +44,37 @@ export async function processMessage(
   }
 
   const tx = aiOutput;
+
+  if (tx.isInvoicePayment === true && tx.paymentMethod) {
+    const account = await prisma.account.findFirst({
+      where: {
+        userId,
+        type: 'credit_card',
+        name: { equals: tx.paymentMethod, mode: 'insensitive' },
+      },
+    });
+    if (account) {
+      const openInvoice = await prisma.invoice.findFirst({
+        where: { accountId: account.id, status: { in: ['open', 'partial'] } },
+        orderBy: { dueDate: 'asc' },
+      });
+      if (openInvoice) {
+        const { transaction, invoice: updatedInvoice } = await payInvoice(
+          prisma,
+          userId,
+          openInvoice.id,
+          tx.amount,
+          {
+            description: tx.description,
+            paymentMethod: tx.paymentMethod,
+            paymentDate: new Date(tx.transactionDate),
+          },
+        );
+        const reply = `✅ Pagamento de R$${Number(tx.amount).toFixed(2)} registrado na fatura ${account.name} (saldo restante: R$${(Number(updatedInvoice.totalAmount) - Number(updatedInvoice.paidAmount)).toFixed(2)})`;
+        return { type: 'created', transaction, reply };
+      }
+    }
+  }
 
   let categoryId: string | undefined;
   if (tx.category) {

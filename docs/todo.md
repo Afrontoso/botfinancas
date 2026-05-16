@@ -4143,7 +4143,7 @@ Commit `5adf2e2`.
 
 ---
 
-## [ ] T-078: Setup — Prompt invoice-payment-detection.v1.md
+## [x] T-078: Setup — Prompt invoice-payment-detection.v1.md
 
 | Campo | Valor |
 |---|---|
@@ -4183,7 +4183,7 @@ Garantir que tests existentes seguem verdes (campo opcional).
 
 ---
 
-## [ ] T-079: [TDD-Test] processor detecta invoice payment
+## [x] T-079: [TDD-Test] processor detecta invoice payment
 
 | Campo | Valor |
 |---|---|
@@ -4223,7 +4223,7 @@ Seedar Invoice no DB para testar.
 
 ---
 
-## [ ] T-080: [TDD-Impl] processor chama payInvoice quando detectado
+## [x] T-080: [TDD-Impl] processor chama payInvoice quando detectado
 
 | Campo | Valor |
 |---|---|
@@ -4259,7 +4259,7 @@ Fallback: se não encontrar Invoice → criar Transaction normal (flow atual).
 
 ---
 
-## [ ] T-081: Review S-5
+## [x] T-081: Review S-5
 
 | Campo | Valor |
 |---|---|

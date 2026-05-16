@@ -75,4 +75,73 @@ describe('processMessage', () => {
     const tx = await prisma.transaction.findFirst({ where: { userId } });
     expect(tx).toBeNull();
   });
+
+  it('detects invoice payment and routes to payInvoice when open invoice exists', async () => {
+    const account = await prisma.account.create({
+      data: { userId, name: 'Nubank', type: 'credit_card', closingDay: 15, dueDay: 22 },
+    });
+    const invoice = await prisma.invoice.create({
+      data: {
+        accountId: account.id,
+        periodStart: new Date('2026-05-01'),
+        periodEnd: new Date('2026-05-15'),
+        dueDate: new Date('2026-05-22'),
+        totalAmount: 800,
+        paidAmount: 0,
+        status: 'open',
+      },
+    });
+
+    const llm = new FakeLlmClient([
+      JSON.stringify({
+        intent: 'create_transaction',
+        type: 'transfer',
+        amount: 500,
+        currency: 'BRL',
+        description: 'Pagamento da fatura Nubank',
+        transactionDate: '2026-05-16',
+        paymentMethod: 'Nubank',
+        isInvoicePayment: true,
+        confidence: 0.97,
+      }),
+    ]);
+
+    const result = await processMessage('paguei 500 da fatura do nubank', userId, llm);
+    expect(result.type).toBe('created');
+    expect(result.reply.toLowerCase()).toContain('pagamento');
+
+    const updated = await prisma.invoice.findUnique({ where: { id: invoice.id } });
+    expect(Number(updated?.paidAmount)).toBe(500);
+    expect(updated?.status).toBe('partial');
+
+    const ip = await prisma.invoicePayment.findFirst({ where: { invoiceId: invoice.id } });
+    expect(ip).not.toBeNull();
+    expect(Number(ip?.amount)).toBe(500);
+  });
+
+  it('falls back to normal Transaction when isInvoicePayment but no open invoice found', async () => {
+    const llm = new FakeLlmClient([
+      JSON.stringify({
+        intent: 'create_transaction',
+        type: 'transfer',
+        amount: 300,
+        currency: 'BRL',
+        description: 'Pagamento da fatura Itaú',
+        transactionDate: '2026-05-16',
+        paymentMethod: 'Itaú',
+        isInvoicePayment: true,
+        confidence: 0.9,
+      }),
+    ]);
+
+    const result = await processMessage('paguei 300 do cartao itau', userId, llm);
+    expect(result.type).toBe('created');
+
+    const tx = await prisma.transaction.findFirst({ where: { userId } });
+    expect(tx).not.toBeNull();
+    expect(tx?.invoiceId).toBeNull();
+
+    const ip = await prisma.invoicePayment.findFirst();
+    expect(ip).toBeNull();
+  });
 });
