@@ -4,6 +4,7 @@ import { detectIntent } from '../ai/intent';
 import { loadPrompt } from '../ai/prompt-loader';
 import { parseAiResponse } from '../ai/service';
 import { findOrCreateCategory } from './categories';
+import { handleQuery } from './query-handler';
 import { prisma } from '../lib/prisma';
 
 export type ProcessResult = {
@@ -20,7 +21,8 @@ export async function processMessage(
   const intent = detectIntent(message);
 
   if (intent === 'query') {
-    return { type: 'query', reply: 'Consultas ainda não estão disponíveis nesta versão.' };
+    const reply = await handleQuery(message, userId, llm);
+    return { type: 'query', reply };
   }
 
   if (intent !== 'create_transaction') {
