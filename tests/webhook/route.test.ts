@@ -2,17 +2,15 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { prisma } from '../setup';
 
-vi.mock('../../src/processor/stub', () => ({
-  stubProcessor: {
-    processMessage: vi.fn().mockResolvedValue({
-      kind: 'query_answered',
-      reply: 'Mensagem recebida. Processamento por IA ainda não está ativo.',
-    }),
-  },
+vi.mock('../../src/financial/processor', () => ({
+  processMessage: vi.fn().mockResolvedValue({
+    type: 'query',
+    reply: 'Mensagem recebida. Processamento por IA ainda não está ativo.',
+  }),
 }));
 
 import { POST } from '../../src/app/api/webhooks/telegram/route';
-import { stubProcessor } from '../../src/processor/stub';
+import { processMessage } from '../../src/financial/processor';
 
 const VALID_SECRET = 'test-secret-token-xxxx';
 const ALLOWED_USER_ID = '123456789';
@@ -50,8 +48,8 @@ describe('POST /api/webhooks/telegram', () => {
     fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue(
       new Response('{"ok":true}', { status: 200 }),
     );
-    vi.mocked(stubProcessor.processMessage).mockResolvedValue({
-      kind: 'query_answered',
+    vi.mocked(processMessage).mockResolvedValue({
+      type: 'query',
       reply: 'Mensagem recebida. Processamento por IA ainda não está ativo.',
     });
   });
@@ -132,17 +130,18 @@ describe('POST /api/webhooks/telegram', () => {
     expect(voiceLog?.messageType).toBe('audio');
   });
 
-  it('calls processMessage with the persisted MessageLog id', async () => {
-    await POST(makeRequest(makeTextUpdate(1)));
-    const log = await prisma.messageLog.findFirst();
-    expect(vi.mocked(stubProcessor.processMessage)).toHaveBeenCalledOnce();
-    const arg = vi.mocked(stubProcessor.processMessage).mock.calls[0]?.[0];
-    expect(arg?.messageLogId).toBe(log?.id);
+  it('calls processMessage with the normalized text and userId', async () => {
+    await POST(makeRequest(makeTextUpdate(1, ALLOWED_USER_ID, 'Olá bot')));
+    expect(vi.mocked(processMessage)).toHaveBeenCalledOnce();
+    const [text, userId] = vi.mocked(processMessage).mock.calls[0]!;
+    expect(text).toBe('Olá bot');
+    const user = await prisma.user.findFirst({ where: { telegramUserId: ALLOWED_USER_ID } });
+    expect(userId).toBe(user?.id);
   });
 
   it('sends the processMessage reply back via Telegram API (mocked fetch)', async () => {
-    vi.mocked(stubProcessor.processMessage).mockResolvedValue({
-      kind: 'query_answered',
+    vi.mocked(processMessage).mockResolvedValue({
+      type: 'query',
       reply: 'Resposta personalizada',
     });
     await POST(makeRequest(makeTextUpdate(1)));
@@ -154,18 +153,17 @@ describe('POST /api/webhooks/telegram', () => {
     );
   });
 
-  it('returns 200 even when processMessage returns kind=error (so Telegram does not retry)', async () => {
-    vi.mocked(stubProcessor.processMessage).mockResolvedValue({
-      kind: 'error',
+  it('returns 200 even when processMessage returns rejected (so Telegram does not retry)', async () => {
+    vi.mocked(processMessage).mockResolvedValue({
+      type: 'rejected',
       reply: 'Ocorreu um erro.',
-      reason: 'Internal error',
     });
     const res = await POST(makeRequest(makeTextUpdate(1)));
     expect(res.status).toBe(200);
   });
 
   it('returns 200 even when processMessage throws (logs the error)', async () => {
-    vi.mocked(stubProcessor.processMessage).mockRejectedValue(new Error('processor crash'));
+    vi.mocked(processMessage).mockRejectedValue(new Error('processor crash'));
     const res = await POST(makeRequest(makeTextUpdate(1)));
     expect(res.status).toBe(200);
   });

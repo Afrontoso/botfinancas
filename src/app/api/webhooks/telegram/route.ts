@@ -4,7 +4,8 @@ import { validateTelegramSecret, isUserAllowed } from '../../../../webhook/auth'
 import { TelegramUpdateSchema } from '../../../../webhook/telegram-payload';
 import { normalizeTelegramUpdate } from '../../../../webhook/normalize';
 import { sendMessage } from '../../../../webhook/reply';
-import { stubProcessor } from '../../../../processor/stub';
+import { processMessage } from '../../../../financial/processor';
+import { OllamaLlmClient } from '../../../../ai/llm-client';
 
 export async function POST(request: Request): Promise<Response> {
   const authResult = validateTelegramSecret(request);
@@ -72,14 +73,13 @@ export async function POST(request: Request): Promise<Response> {
     throw err;
   }
 
-  let result;
+  let result: { reply: string };
   try {
-    result = await stubProcessor.processMessage({
-      userId: user.id,
-      text: normalized.normalizedText ?? '',
-      receivedAt: messageLog.createdAt,
-      messageLogId: messageLog.id,
-    });
+    const llm = new OllamaLlmClient(
+      process.env['OLLAMA_BASE_URL'] ?? 'http://localhost:11434',
+      process.env['OLLAMA_TEXT_MODEL'] ?? 'llama3.1',
+    );
+    result = await processMessage(normalized.normalizedText ?? '', user.id, llm);
   } catch (err) {
     logger.error({ err, messageLogId: messageLog.id }, 'processMessage threw');
     return new Response('ok', { status: 200 });

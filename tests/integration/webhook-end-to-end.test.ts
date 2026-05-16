@@ -1,6 +1,14 @@
 /// <reference types="vitest/globals" />
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { prisma } from '../setup';
+
+vi.mock('../../src/financial/processor', () => ({
+  processMessage: vi.fn().mockResolvedValue({
+    type: 'created',
+    reply: 'Transação registrada com sucesso.',
+  }),
+}));
+
 import { POST } from '../../src/app/api/webhooks/telegram/route';
 
 const VALID_SECRET = 'e2e-secret-token-xxxx';
