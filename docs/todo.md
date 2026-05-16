@@ -3596,7 +3596,7 @@ Reportar resultado do smoke test. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-058: Review S-3 (revisão final MVP)
+## [x] T-058: Review S-3 (revisão final MVP)
 
 | Campo | Valor |
 |---|---|
