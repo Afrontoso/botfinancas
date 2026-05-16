@@ -1948,7 +1948,7 @@ test
 
 ---
 
-## [ ] T-030: [TDD-Test] extractJson — isolar bloco JSON de resposta bruta do LLM
+## [x] T-030: [TDD-Test] extractJson — isolar bloco JSON de resposta bruta do LLM
 
 | Campo | Valor |
 |---|---|
@@ -2011,7 +2011,7 @@ Reportar: casos escritos, resultado do teste (deve falhar). NÃO fazer commit. P
 
 ---
 
-## [ ] T-031: [TDD-Impl] extractJson — implementação
+## [x] T-031: [TDD-Impl] extractJson — implementação
 
 | Campo | Valor |
 |---|---|
@@ -2070,7 +2070,7 @@ Reportar resultado do teste (deve ser verde). NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-032: [TDD-Test] schemas.ts — validação Zod dos campos extraídos
+## [x] T-032: [TDD-Test] schemas.ts — validação Zod dos campos extraídos
 
 | Campo | Valor |
 |---|---|
@@ -2138,7 +2138,7 @@ Reportar casos escritos e vermelho confirmado. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-033: [TDD-Impl] schemas.ts — implementação Zod
+## [x] T-033: [TDD-Impl] schemas.ts — implementação Zod
 
 | Campo | Valor |
 |---|---|
@@ -2192,7 +2192,7 @@ Reportar verde. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-034: [TDD-Test] sanitize.ts — limpar e normalizar campos extraídos
+## [x] T-034: [TDD-Test] sanitize.ts — limpar e normalizar campos extraídos
 
 | Campo | Valor |
 |---|---|
@@ -2257,7 +2257,7 @@ Reportar casos e vermelho. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-035: [TDD-Impl] sanitize.ts — implementação
+## [x] T-035: [TDD-Impl] sanitize.ts — implementação
 
 | Campo | Valor |
 |---|---|
@@ -2308,7 +2308,7 @@ Reportar verde. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-036: [TDD-Test] confidence.ts — calcular confiança da extração
+## [x] T-036: [TDD-Test] confidence.ts — calcular confiança da extração
 
 | Campo | Valor |
 |---|---|
@@ -2376,7 +2376,7 @@ Reportar casos e vermelho. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-037: [TDD-Impl] confidence.ts — implementação
+## [x] T-037: [TDD-Impl] confidence.ts — implementação
 
 | Campo | Valor |
 |---|---|
@@ -2423,7 +2423,7 @@ Reportar verde. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-038: [TDD-Test] dates.ts — normalizar datas para UTC/ISO
+## [x] T-038: [TDD-Test] dates.ts — normalizar datas para UTC/ISO
 
 | Campo | Valor |
 |---|---|
@@ -2486,7 +2486,7 @@ Reportar casos e vermelho. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-039: [TDD-Impl] dates.ts — implementação
+## [x] T-039: [TDD-Impl] dates.ts — implementação
 
 | Campo | Valor |
 |---|---|
@@ -2538,7 +2538,7 @@ Reportar verde. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-040: [TDD-Test] categories.ts — mapear categoria para CategoryEnum (real DB)
+## [x] T-040: [TDD-Test] categories.ts — mapear categoria para CategoryEnum (real DB)
 
 | Campo | Valor |
 |---|---|
@@ -2601,7 +2601,7 @@ Reportar casos e vermelho. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-041: [TDD-Impl] categories.ts — implementação
+## [x] T-041: [TDD-Impl] categories.ts — implementação
 
 | Campo | Valor |
 |---|---|
@@ -2768,7 +2768,7 @@ Reportar verde. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-044: [TDD-Test] intent.ts — classificar intenção da mensagem
+## [x] T-044: [TDD-Test] intent.ts — classificar intenção da mensagem
 
 | Campo | Valor |
 |---|---|
@@ -2830,7 +2830,7 @@ Reportar casos e vermelho. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-045: [TDD-Impl] intent.ts — implementação
+## [x] T-045: [TDD-Impl] intent.ts — implementação
 
 | Campo | Valor |
 |---|---|
@@ -2882,7 +2882,7 @@ Reportar verde. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-046: Criar prompt template transaction-extraction.v1.md
+## [x] T-046: Criar prompt template transaction-extraction.v1.md
 
 | Campo | Valor |
 |---|---|
