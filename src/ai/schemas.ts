@@ -9,6 +9,7 @@ export const LlmTransactionSchema = z.object({
   category: z.string().optional(),
   transactionDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   paymentMethod: z.string().nullable().optional(),
+  isInvoicePayment: z.boolean().optional(),
   confidence: z.number().min(0).max(1),
 });
 

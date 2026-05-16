@@ -4022,7 +4022,7 @@ Commit `cf77fbf`.
 
 ---
 
-## [ ] T-075: Review S-4
+## [x] T-075: Review S-4
 
 | Campo | Valor |
 |---|---|

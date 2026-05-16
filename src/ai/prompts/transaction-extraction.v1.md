@@ -14,6 +14,7 @@ Retorne um objeto JSON com exatamente esta estrutura:
 - `category`: string opcional com a categoria (ex.: `"Alimentação"`, `"Transporte"`, `"Salário"`) — omita se não for possível inferir
 - `transactionDate`: string no formato `"yyyy-mm-dd"` — se a data não for mencionada explicitamente, use a data de hoje
 - `paymentMethod`: string com o meio de pagamento (ex.: `"pix"`, `"cartão de crédito"`, `"dinheiro"`) ou `null` se não informado
+- `isInvoicePayment`: `true` SOMENTE se a mensagem indicar que o usuário PAGOU a fatura/boleto de um cartão de crédito (ex.: "paguei a fatura do nubank", "boleto do cartão"). Caso contrário, omita ou use `false`.
 - `confidence`: número entre 0 e 1 indicando sua confiança na extração (1.0 = certeza absoluta)
 
 ## Exemplos
@@ -50,6 +51,24 @@ Mensagem do usuário: "Recebi 4200 de salário hoje"
   "category": "Salário",
   "transactionDate": "2026-05-16",
   "paymentMethod": null,
+  "confidence": 0.97
+}
+```
+
+### Exemplo 3 — Pagamento de fatura
+
+Mensagem do usuário: "Paguei a fatura do Nubank 500 reais hoje"
+
+```json
+{
+  "intent": "create_transaction",
+  "type": "transfer",
+  "amount": 500.00,
+  "currency": "BRL",
+  "description": "Pagamento da fatura Nubank",
+  "transactionDate": "2026-05-16",
+  "paymentMethod": "Nubank",
+  "isInvoicePayment": true,
   "confidence": 0.97
 }
 ```
