@@ -3436,7 +3436,7 @@ DEFINIÇÃO DE PRONTO:
 
 ---
 
-## [ ] T-055: Trocar stubProcessor por realProcessor no webhook
+## [x] T-055: Trocar stubProcessor por realProcessor no webhook
 
 | Campo | Valor |
 |---|---|
@@ -3493,7 +3493,7 @@ Reportar alteração feita e resultado de pnpm test. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-056: Integration tests A↔B
+## [x] T-056: Integration tests A↔B
 
 | Campo | Valor |
 |---|---|
