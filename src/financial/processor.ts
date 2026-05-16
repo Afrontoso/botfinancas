@@ -6,6 +6,7 @@ import { parseAiResponse } from '../ai/service';
 import { findOrCreateCategory } from './categories';
 import { handleQuery } from './query-handler';
 import { payInvoice } from './invoice-payment';
+import { createRecurring } from './recurring-service';
 import { prisma } from '../lib/prisma';
 
 export type ProcessResult = {
@@ -24,6 +25,10 @@ export async function processMessage(
   if (intent === 'query') {
     const reply = await handleQuery(message, userId, llm);
     return { type: 'query', reply };
+  }
+
+  if (intent === 'create_recurring') {
+    return handleRecurring(message, userId, llm);
   }
 
   if (intent !== 'create_transaction') {
@@ -133,4 +138,52 @@ export async function processMessage(
   const reply = `✅ ${typeLabel} de R$${Number(tx.amount).toFixed(2)} registrada: ${tx.description}`;
 
   return { type: 'created', transaction, reply };
+}
+
+async function handleRecurring(
+  message: string,
+  userId: string,
+  llm: LlmClient,
+): Promise<ProcessResult> {
+  let aiOutput: Awaited<ReturnType<typeof parseAiResponse>>;
+  try {
+    const prompt = loadPrompt('recurring-extraction.v1', { USER_MESSAGE: message });
+    const rawText = await llm.complete(prompt);
+    aiOutput = await parseAiResponse(rawText);
+  } catch {
+    return { type: 'rejected', reply: 'Não consegui entender a recorrência. Pode reformular?' };
+  }
+
+  if (aiOutput.intent !== 'create_recurring') {
+    return { type: 'rejected', reply: 'Não consegui identificar uma transação recorrente.' };
+  }
+
+  const rec = aiOutput;
+
+  let categoryId: string | undefined;
+  if (rec.category) {
+    const category = await findOrCreateCategory(prisma, userId, rec.category, rec.type);
+    categoryId = category.id;
+  }
+
+  await createRecurring(prisma, {
+    userId,
+    name: rec.name,
+    expectedAmount: rec.expectedAmount,
+    currency: rec.currency,
+    type: rec.type,
+    periodicity: rec.periodicity,
+    expectedDay: rec.expectedDay,
+    categoryId,
+  });
+
+  const periodLabel =
+    rec.periodicity === 'monthly'
+      ? `todo dia ${rec.expectedDay}`
+      : rec.periodicity === 'weekly'
+      ? `toda semana`
+      : `todo ano`;
+  const reply = `🔁 Recorrente registrada: ${rec.name} — R$${Number(rec.expectedAmount).toFixed(2)} ${periodLabel}`;
+
+  return { type: 'created', reply };
 }

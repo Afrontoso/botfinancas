@@ -30,9 +30,24 @@ export const LlmQuerySchema = z.object({
 
 export type LlmQuery = z.infer<typeof LlmQuerySchema>;
 
+export const LlmRecurringSchema = z.object({
+  intent: z.literal('create_recurring'),
+  name: z.string().min(1),
+  expectedAmount: z.number().positive(),
+  currency: z.string().default('BRL'),
+  type: z.enum(['expense', 'income']).default('expense'),
+  category: z.string().optional(),
+  periodicity: z.enum(['monthly', 'weekly', 'yearly']),
+  expectedDay: z.number().int().min(1).max(366),
+  confidence: z.number().min(0).max(1),
+});
+
+export type LlmRecurring = z.infer<typeof LlmRecurringSchema>;
+
 export const LlmOutputSchema = z.discriminatedUnion('intent', [
   LlmTransactionSchema,
   LlmQuerySchema,
+  LlmRecurringSchema,
 ]);
 
 export type LlmOutput = z.infer<typeof LlmOutputSchema>;

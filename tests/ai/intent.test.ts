@@ -22,4 +22,16 @@ describe('detectIntent', () => {
   it('defaults to create_transaction for ambiguous text', () => {
     expect(detectIntent('alguma coisa aleatória')).toBe('create_transaction');
   });
+
+  it('classifies "Todo dia 5 pago aluguel" as create_recurring', () => {
+    expect(detectIntent('Todo dia 5 pago 1500 de aluguel')).toBe('create_recurring');
+  });
+
+  it('classifies "Todo mês recebo salário" as create_recurring', () => {
+    expect(detectIntent('Todo mês recebo 5000 de salário')).toBe('create_recurring');
+  });
+
+  it('recurring takes priority over query in ambiguous cases', () => {
+    expect(detectIntent('me mostra todo mês')).toBe('create_recurring');
+  });
 });

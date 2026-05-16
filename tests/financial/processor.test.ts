@@ -119,6 +119,32 @@ describe('processMessage', () => {
     expect(Number(ip?.amount)).toBe(500);
   });
 
+  it('creates a RecurringExpense when intent is create_recurring', async () => {
+    const llm = new FakeLlmClient([
+      JSON.stringify({
+        intent: 'create_recurring',
+        name: 'Aluguel',
+        expectedAmount: 1500,
+        currency: 'BRL',
+        type: 'expense',
+        category: 'Moradia',
+        periodicity: 'monthly',
+        expectedDay: 5,
+        confidence: 0.96,
+      }),
+    ]);
+
+    const result = await processMessage('Todo dia 5 pago 1500 de aluguel', userId, llm);
+    expect(result.type).toBe('created');
+    expect(result.reply.toLowerCase()).toContain('recorrente');
+
+    const recs = await prisma.recurringExpense.findMany({ where: { userId } });
+    expect(recs).toHaveLength(1);
+    expect(recs[0]?.name).toBe('Aluguel');
+    expect(Number(recs[0]?.expectedAmount)).toBe(1500);
+    expect(recs[0]?.expectedDay).toBe(5);
+  });
+
   it('falls back to normal Transaction when isInvoicePayment but no open invoice found', async () => {
     const llm = new FakeLlmClient([
       JSON.stringify({

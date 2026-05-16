@@ -4410,7 +4410,7 @@ Documentar em docs/multi-user-audit.md.
 
 ---
 
-## [ ] T-086: [TDD-Test] recurring-service.ts — CRUD
+## [x] T-086: [TDD-Test] recurring-service.ts — CRUD
 
 | Campo | Valor |
 |---|---|
@@ -4448,7 +4448,7 @@ Seedar 3 recorrentes.
 
 ---
 
-## [ ] T-087: [TDD-Impl] recurring-service.ts
+## [x] T-087: [TDD-Impl] recurring-service.ts
 
 | Campo | Valor |
 |---|---|
@@ -4470,7 +4470,7 @@ Seedar 3 recorrentes.
 
 ---
 
-## [ ] T-088: Setup — Prompt recurring-extraction.v1.md
+## [x] T-088: Setup — Prompt recurring-extraction.v1.md
 
 | Campo | Valor |
 |---|---|
@@ -4494,7 +4494,7 @@ Seedar 3 recorrentes.
 
 ---
 
-## [ ] T-089: [TDD-Test] processor cria recorrente
+## [x] T-089: [TDD-Test] processor cria recorrente
 
 | Campo | Valor |
 |---|---|
@@ -4517,7 +4517,7 @@ Seedar 3 recorrentes.
 
 ---
 
-## [ ] T-090: [TDD-Impl] processor recurring handler
+## [x] T-090: [TDD-Impl] processor recurring handler
 
 | Campo | Valor |
 |---|---|
@@ -4536,7 +4536,7 @@ Seedar 3 recorrentes.
 
 ---
 
-## [ ] T-091: [TDD-Test] reminder-recurring job
+## [x] T-091: [TDD-Test] reminder-recurring job
 
 | Campo | Valor |
 |---|---|
@@ -4559,7 +4559,7 @@ Seedar 3 recorrentes.
 
 ---
 
-## [ ] T-092: [TDD-Impl] reminder-recurring.ts
+## [x] T-092: [TDD-Impl] reminder-recurring.ts
 
 | Campo | Valor |
 |---|---|
@@ -4578,7 +4578,7 @@ Seedar 3 recorrentes.
 
 ---
 
-## [ ] T-093: Review S-7
+## [x] T-093: Review S-7
 
 | Campo | Valor |
 |---|---|

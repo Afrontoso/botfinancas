@@ -1,4 +1,4 @@
-export type Intent = 'create_transaction' | 'query';
+export type Intent = 'create_transaction' | 'query' | 'create_recurring';
 
 const QUERY_PATTERNS = [
   /\bquanto\b/i,
@@ -11,13 +11,22 @@ const QUERY_PATTERNS = [
   /\brelatorio\b/i,
 ];
 
-export function detectIntent(message: string): Intent {
-  const hasQuery = QUERY_PATTERNS.some((re) => re.test(message));
+const RECURRING_PATTERNS = [
+  /\btodo\s+dia\s+\d+\b/i,
+  /\btodo\s+mês\b/i,
+  /\btodo\s+mes\b/i,
+  /\btoda\s+semana\b/i,
+  /\bmensalmente\b/i,
+  /\bsemanalmente\b/i,
+  /\banualmente\b/i,
+];
 
-  // Query signals take priority; ambiguous text defaults to create_transaction
-  if (hasQuery) {
+export function detectIntent(message: string): Intent {
+  if (RECURRING_PATTERNS.some((re) => re.test(message))) {
+    return 'create_recurring';
+  }
+  if (QUERY_PATTERNS.some((re) => re.test(message))) {
     return 'query';
   }
-
   return 'create_transaction';
 }
