@@ -3552,7 +3552,7 @@ Reportar testes escritos e resultado. NÃO fazer commit. Pare.
 
 ---
 
-## [ ] T-057: Smoke test manual
+## [x] T-057: Smoke test manual
 
 | Campo | Valor |
 |---|---|
