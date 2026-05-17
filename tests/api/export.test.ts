@@ -1,6 +1,18 @@
 /// <reference types="vitest/globals" />
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { prisma } from '../setup';
+
+// getCurrentUser depende de auth() (NextAuth), que tenta importar next/server
+// em runtime de Node puro e falha. Aqui injetamos um getter que devolve o
+// primeiro User do banco — fluxo equivalente ao stub pré-S-9 do dashboard.
+vi.mock('../../src/lib/current-user', () => ({
+  getCurrentUser: async () => {
+    const u = await prisma.user.findFirst({ orderBy: { createdAt: 'asc' } });
+    if (!u) throw new Error('mock getCurrentUser: nenhum user no banco');
+    return u;
+  },
+}));
+
 import { GET as csvGet } from '../../src/app/api/export/csv/route';
 import { GET as pdfGet } from '../../src/app/api/export/pdf/route';
 

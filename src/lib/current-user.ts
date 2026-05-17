@@ -1,14 +1,40 @@
-import { prisma } from './prisma';
+import { redirect } from 'next/navigation';
 import type { User } from '@prisma/client';
+import { auth } from './auth';
+import { prisma } from './prisma';
 
 /**
- * TODO(S-9): substituir por usuário da sessão NextAuth.
- * Por ora, retorna o primeiro User do banco — modelo single-user do MVP.
+ * Retorna o User do Telegram associado à sessão web atual.
+ *
+ * Fluxo (após S-9):
+ *   1. Lê a sessão NextAuth — sem sessão, redireciona pra /signin.
+ *   2. Acha o Account Google da sessão.
+ *   3. Acha o User Telegram com linkedAccountId === Account.id (vínculo feito
+ *      em /dashboard/link).
+ *   4. Sem vínculo, redireciona pra /dashboard/link.
+ *
+ * Server components que usam isso assumem que estão atrás do middleware
+ * de auth — então a redireção pra /signin é só fallback defensivo.
  */
 export async function getCurrentUser(): Promise<User> {
-  const user = await prisma.user.findFirst({ orderBy: { createdAt: 'asc' } });
-  if (!user) {
-    throw new Error('Nenhum User encontrado no banco. Envie ao menos uma mensagem no Telegram primeiro.');
+  const session = await auth();
+  const sessionUserId = session?.user?.id;
+  if (!sessionUserId) {
+    redirect('/signin');
   }
-  return user;
+
+  const account = await prisma.account.findFirst({
+    where: { userId: sessionUserId, provider: 'google' },
+  });
+  if (!account) {
+    redirect('/signin');
+  }
+
+  const linkedUser = await prisma.user.findUnique({
+    where: { linkedAccountId: account.id },
+  });
+  if (!linkedUser) {
+    redirect('/dashboard/link');
+  }
+  return linkedUser;
 }

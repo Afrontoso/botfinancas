@@ -42,6 +42,12 @@ export async function sendReminder(
   reminder: Reminder,
   user: User,
 ): Promise<void> {
+  if (!user.telegramUserId) {
+    // User só-web (sem vínculo Telegram) — não dá pra enviar mensagem.
+    // Não marcamos sent: o reminder fica pending mas nunca vai ser enviado.
+    // Em prática isso só acontece pra User criado pelo NextAuth ainda não vinculado.
+    throw new Error(`sendReminder: user ${user.id} sem telegramUserId`);
+  }
   const text = formatReminderMessage(reminder);
   await sendFn(user.telegramUserId, text);
   await markSent(prisma, reminder.id);

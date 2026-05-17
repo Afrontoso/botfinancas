@@ -25,7 +25,7 @@ export async function processMessage(
   const trimmed = message.trim().toLowerCase();
   if (trimmed === '/vincular' || trimmed === 'vincular') {
     const user = await prisma.user.findUnique({ where: { id: userId } });
-    if (!user) {
+    if (!user || !user.telegramUserId) {
       return { type: 'unknown', reply: 'Não consegui identificar sua conta.' };
     }
     const code = await generateLinkCode(prisma, user.telegramUserId);

@@ -19,7 +19,7 @@ describe('link-account', () => {
     const telegramUser = await prisma.user.create({
       data: { telegramUserId: '111222', name: 'Tele User' },
     });
-    telegramUserId = telegramUser.telegramUserId;
+    telegramUserId = telegramUser.telegramUserId!;
     financialUserId = telegramUser.id;
 
     // User criado pelo NextAuth no primeiro login Google

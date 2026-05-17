@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { decideAuth, SESSION_COOKIE_NAMES } from './src/lib/middleware-auth';
+import { decideAuth, SESSION_COOKIE_NAMES } from './lib/middleware-auth';
 
 export function middleware(request: NextRequest) {
   const hasSession = SESSION_COOKIE_NAMES.some(
