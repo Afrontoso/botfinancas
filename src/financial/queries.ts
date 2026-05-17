@@ -73,6 +73,41 @@ export async function listRecent(
   });
 }
 
+export type PaginatedTransactionsFilter = {
+  type?: TxType;
+  categoryId?: string;
+};
+
+export type PaginatedTransactionsResult = {
+  items: TransactionWithCategory[];
+  total: number;
+};
+
+export async function listTransactionsPaginated(
+  prisma: PrismaClient,
+  userId: string,
+  offset: number,
+  limit: number,
+  filter: PaginatedTransactionsFilter = {},
+): Promise<PaginatedTransactionsResult> {
+  const where = {
+    userId,
+    ...(filter.type ? { type: filter.type } : {}),
+    ...(filter.categoryId ? { categoryId: filter.categoryId } : {}),
+  };
+  const [items, total] = await Promise.all([
+    prisma.transaction.findMany({
+      where,
+      orderBy: { transactionDate: 'desc' },
+      skip: offset,
+      take: limit,
+      include: { category: true },
+    }),
+    prisma.transaction.count({ where }),
+  ]);
+  return { items, total };
+}
+
 export type BalanceResult = {
   income: number;
   expense: number;

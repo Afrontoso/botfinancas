@@ -1,5 +1,7 @@
 import type { ReactElement } from 'react';
 import type { TransactionWithCategory, BalanceResult } from '../financial/queries';
+import { PageHeader } from './ui/page-header';
+import { formatBRL } from './ui/format';
 
 export type DashboardViewProps = {
   balance: BalanceResult;
@@ -9,10 +11,7 @@ export type DashboardViewProps = {
 export function DashboardView({ balance, recent }: DashboardViewProps): ReactElement {
   return (
     <div className="space-y-8">
-      <header>
-        <h2 className="text-2xl font-semibold">Dashboard</h2>
-        <p className="text-sm text-[var(--muted)]">Visão geral das finanças do mês.</p>
-      </header>
+      <PageHeader title="Dashboard" subtitle="Visão geral das finanças do mês." />
 
       <section className="grid grid-cols-3 gap-4">
         <Card label="Receitas" value={balance.income} color="positive" />
@@ -40,7 +39,7 @@ export function DashboardView({ balance, recent }: DashboardViewProps): ReactEle
                     t.type === 'expense' ? 'text-[var(--negative)]' : 'text-[var(--positive)]'
                   }
                 >
-                  {t.type === 'expense' ? '-' : '+'}R$ {Number(t.amount).toFixed(2)}
+                  {t.type === 'expense' ? '-' : '+'}{formatBRL(t.amount)}
                 </div>
               </li>
             ))}
@@ -69,7 +68,7 @@ function Card({
   return (
     <div className="rounded-lg border border-[var(--border)] bg-[#0a0c10] p-4">
       <div className="text-xs uppercase tracking-wide text-[var(--muted)]">{label}</div>
-      <div className={`mt-2 text-2xl font-semibold ${colorClass}`}>R$ {value.toFixed(2)}</div>
+      <div className={`mt-2 text-2xl font-semibold ${colorClass}`}>{formatBRL(value)}</div>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import {
   listByCategory,
   listRecent,
   computeBalance,
+  listTransactionsPaginated,
 } from '../../src/financial/queries';
 
 describe('queries', () => {
@@ -133,6 +134,47 @@ describe('queries', () => {
     it('respects the limit parameter', async () => {
       const result = await listRecent(prisma, userId, 2);
       expect(result).toHaveLength(2);
+    });
+  });
+
+  describe('listTransactionsPaginated', () => {
+    it('returns items and total count without filter', async () => {
+      const result = await listTransactionsPaginated(prisma, userId, 0, 10);
+      expect(result.total).toBe(5);
+      expect(result.items).toHaveLength(5);
+      // ordered by transactionDate desc
+      expect(result.items[0]?.description).toBe('Uber'); // 2026-05-10
+    });
+
+    it('paginates with offset and limit', async () => {
+      const first = await listTransactionsPaginated(prisma, userId, 0, 2);
+      const second = await listTransactionsPaginated(prisma, userId, 2, 2);
+      expect(first.items).toHaveLength(2);
+      expect(second.items).toHaveLength(2);
+      expect(first.items[0]?.id).not.toBe(second.items[0]?.id);
+      expect(first.total).toBe(5);
+      expect(second.total).toBe(5);
+    });
+
+    it('filters by type', async () => {
+      const result = await listTransactionsPaginated(prisma, userId, 0, 10, { type: 'income' });
+      expect(result.total).toBe(1);
+      expect(result.items[0]?.description).toBe('Salário');
+    });
+
+    it('filters by categoryId', async () => {
+      const result = await listTransactionsPaginated(prisma, userId, 0, 10, {
+        categoryId: foodCategoryId,
+      });
+      expect(result.total).toBe(3); // 2 May + 1 April
+      expect(result.items.every((t) => t.categoryId === foodCategoryId)).toBe(true);
+    });
+
+    it('includes category relation', async () => {
+      const result = await listTransactionsPaginated(prisma, userId, 0, 1, {
+        categoryId: transportCategoryId,
+      });
+      expect(result.items[0]?.category?.name).toBe('Transporte');
     });
   });
 
