@@ -12,7 +12,7 @@ describe('generateInvoiceDueReminders', () => {
       data: { telegramUserId: '9090', name: 'Invoice User' },
     });
     userId = user.id;
-    const acc = await prisma.account.create({
+    const acc = await prisma.financialAccount.create({
       data: {
         userId,
         name: 'Nubank',

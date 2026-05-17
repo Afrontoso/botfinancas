@@ -29,7 +29,7 @@ describe('POST /api/cron/invoice-due', () => {
       data: { telegramUserId: '7777', name: 'Cron User' },
     });
     userId = user.id;
-    const acc = await prisma.account.create({
+    const acc = await prisma.financialAccount.create({
       data: {
         userId,
         name: 'Itaú',

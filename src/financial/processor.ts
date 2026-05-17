@@ -51,7 +51,7 @@ export async function processMessage(
   const tx = aiOutput;
 
   if (tx.isInvoicePayment === true && tx.paymentMethod) {
-    const account = await prisma.account.findFirst({
+    const account = await prisma.financialAccount.findFirst({
       where: {
         userId,
         type: 'credit_card',
@@ -89,7 +89,7 @@ export async function processMessage(
 
   let invoiceId: string | undefined;
   if (tx.paymentMethod) {
-    const account = await prisma.account.findFirst({
+    const account = await prisma.financialAccount.findFirst({
       where: {
         userId,
         type: 'credit_card',

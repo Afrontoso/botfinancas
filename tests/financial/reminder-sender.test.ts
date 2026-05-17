@@ -6,7 +6,7 @@ import {
   formatReminderMessage,
   processDueReminders,
 } from '../../src/financial/reminder-sender';
-import type { Reminder, User } from '@prisma/client';
+import type { Prisma, Reminder, User } from '@prisma/client';
 
 describe('reminder-sender', () => {
   let user: User;
@@ -17,10 +17,12 @@ describe('reminder-sender', () => {
     });
   });
 
-  async function makeReminder(overrides: Partial<Reminder> = {}): Promise<Reminder> {
+  async function makeReminder(
+    overrides: Partial<Prisma.ReminderCreateInput> & { scheduledFor?: Date } = {},
+  ): Promise<Reminder> {
     return prisma.reminder.create({
       data: {
-        userId: user.id,
+        user: { connect: { id: user.id } },
         type: 'custom',
         scheduledFor: new Date('2026-05-17T10:00:00Z'),
         payload: { message: 'Lembrete genérico' },

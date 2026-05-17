@@ -10,6 +10,13 @@ const EnvSchema = z.object({
   OLLAMA_TEXT_MODEL: z.string().min(1),
   LOG_LEVEL: z.string().default('info'),
   NODE_ENV: z.string().default('development'),
+  // S-9 (auth web Google). Opcionais aqui — só ficam obrigatórios no runtime
+  // do NextAuth (que falha sozinho se faltar).
+  AUTH_SECRET: z.string().optional(),
+  GOOGLE_CLIENT_ID: z.string().optional(),
+  GOOGLE_CLIENT_SECRET: z.string().optional(),
+  // S-11 (crons protegidos). Opcional — só obrigatório nos endpoints /api/cron/*.
+  CRON_SECRET: z.string().optional(),
 });
 
 export function parseEnv() {

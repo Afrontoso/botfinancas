@@ -31,7 +31,7 @@ describe('processMessage', () => {
   });
 
   it('creates Transaction and increments Invoice.totalAmount atomically for card expense', async () => {
-    const account = await prisma.account.create({
+    const account = await prisma.financialAccount.create({
       data: {
         userId,
         name: 'Nubank',
@@ -77,7 +77,7 @@ describe('processMessage', () => {
   });
 
   it('detects invoice payment and routes to payInvoice when open invoice exists', async () => {
-    const account = await prisma.account.create({
+    const account = await prisma.financialAccount.create({
       data: { userId, name: 'Nubank', type: 'credit_card', closingDay: 15, dueDay: 22 },
     });
     const invoice = await prisma.invoice.create({

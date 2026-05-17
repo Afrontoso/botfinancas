@@ -15,12 +15,12 @@ describe('payInvoice', () => {
     });
     userId = user.id;
 
-    const card = await prisma.account.create({
+    const card = await prisma.financialAccount.create({
       data: { userId, name: 'Nubank', type: 'credit_card', closingDay: 15, dueDay: 22 },
     });
     cardAccountId = card.id;
 
-    const checking = await prisma.account.create({
+    const checking = await prisma.financialAccount.create({
       data: { userId, name: 'Conta Corrente', type: 'checking' },
     });
     checkingAccountId = checking.id;
@@ -91,7 +91,7 @@ describe('payInvoice', () => {
     const otherUser = await prisma.user.create({
       data: { telegramUserId: '999999999', name: 'Other' },
     });
-    const otherCard = await prisma.account.create({
+    const otherCard = await prisma.financialAccount.create({
       data: { userId: otherUser.id, name: 'OtherCard', type: 'credit_card', closingDay: 1, dueDay: 10 },
     });
     const otherInvoice = await prisma.invoice.create({

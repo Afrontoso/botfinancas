@@ -18,7 +18,7 @@ model User {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  accounts          Account[]
+  accounts          FinancialAccount[]
   categories        Category[]
   transactions      Transaction[]
   messages          MessageLog[]
@@ -28,6 +28,14 @@ model User {
   recurringExpenses RecurringExpense[]
   budgets           Budget[]
   reminders         Reminder[]
+
+  // NextAuth (login web via Google) — opcional, populado quando o usuário
+  // vincula a conta web via /vincular.
+  email         String?    @unique
+  emailVerified DateTime?
+  image         String?
+  authAccounts  Account[]
+  sessions      Session[]
 }
 
 /// Pessoas externas com quem o usuário divide despesas (ex: esposa, amigo).
@@ -50,10 +58,12 @@ model Contact {
 // ─── CONTAS E COFRES ──────────────────────────────────────────────────────────
 
 /// Representa qualquer conta financeira do usuário.
-/// Cofres (vaults) são modelados como Account com type=vault e parentAccountId apontando
-/// para a conta-mãe. Cofres podem ser efêmeros ("cofre da farmácia", "cofre do cartão deste mês").
-/// Cartões de crédito usam closingDay e dueDay para cálculo de fatura.
-model Account {
+/// Cofres (vaults) são modelados como FinancialAccount com type=vault e parentAccountId
+/// apontando pra conta-mãe. Cofres podem ser efêmeros ("cofre da farmácia", "cofre do
+/// cartão deste mês"). Cartões de crédito usam closingDay e dueDay para cálculo de fatura.
+/// (Renomeado de "Account" em S-9 pra liberar o nome ao NextAuth — a tabela física segue
+/// chamada FinancialAccount após a migration de S-9.)
+model FinancialAccount {
   id              String      @id @default(cuid())
   userId          String
   parentAccountId String?     // null para conta raiz; preenchido para cofres
@@ -68,8 +78,8 @@ model Account {
   updatedAt       DateTime    @updatedAt
 
   user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  parentAccount     Account?           @relation("AccountHierarchy", fields: [parentAccountId], references: [id])
-  childAccounts     Account[]          @relation("AccountHierarchy")
+  parentAccount     FinancialAccount?  @relation("AccountHierarchy", fields: [parentAccountId], references: [id])
+  childAccounts     FinancialAccount[] @relation("AccountHierarchy")
   transactions      Transaction[]
   invoices          Invoice[]
   recurringExpenses RecurringExpense[]
@@ -96,7 +106,7 @@ enum AccountType {
 /// `paidAmount`. Status muda automaticamente conforme paidAmount evolui.
 model Invoice {
   id          String        @id @default(cuid())
-  accountId   String        // Account com type=credit_card
+  accountId   String        // FinancialAccount com type=credit_card
   periodStart DateTime      // dia seguinte ao closingDay anterior
   periodEnd   DateTime      // closingDay deste período
   dueDate     DateTime      // dueDay correspondente
@@ -106,7 +116,7 @@ model Invoice {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
-  account      Account          @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  account      FinancialAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
   transactions Transaction[]    @relation("InvoiceCharges")
   payments     InvoicePayment[]
 
@@ -196,7 +206,7 @@ model Transaction {
   updatedAt         DateTime              @updatedAt
 
   user            User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  account         Account?            @relation(fields: [accountId], references: [id])
+  account         FinancialAccount?   @relation(fields: [accountId], references: [id])
   category        Category?           @relation(fields: [categoryId], references: [id])
   invoice         Invoice?            @relation("InvoiceCharges", fields: [invoiceId], references: [id])
   splits          SharedSplit[]       @relation("ExpenseSplits")
@@ -304,7 +314,7 @@ model RecurringExpense {
 
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   category  Category?  @relation(fields: [categoryId], references: [id])
-  account   Account?   @relation(fields: [accountId], references: [id])
+  account   FinancialAccount? @relation(fields: [accountId], references: [id])
   reminders Reminder[]
 
   @@unique([userId, name])
@@ -447,4 +457,47 @@ model MemoryEntry {
 
   @@index([userId, scope])
   @@index([expiresAt])
+}
+
+// ─── NEXTAUTH (login web Google) ──────────────────────────────────────────────
+// Modelos exigidos pelo @auth/prisma-adapter. Nomes dos modelos (Account/Session/
+// VerificationToken) são fixos — o adapter chama prisma.account/.session/etc.
+// Não renomear sem customizar o adapter.
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }

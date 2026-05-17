@@ -1,9 +1,9 @@
 import type { ReactElement } from 'react';
-import type { Invoice, Account, InvoiceStatus } from '@prisma/client';
+import type { Invoice, FinancialAccount, InvoiceStatus } from '@prisma/client';
 import { PageHeader } from './ui/page-header';
 import { formatBRL } from './ui/format';
 
-export type InvoiceWithAccount = Invoice & { account: Pick<Account, 'id' | 'name'> };
+export type InvoiceWithAccount = Invoice & { account: Pick<FinancialAccount, 'id' | 'name'> };
 
 export type InvoicesViewProps = {
   invoices: InvoiceWithAccount[];

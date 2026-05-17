@@ -27,8 +27,11 @@ beforeEach(async () => {
       "Transaction",
       "MemoryEntry",
       "Category",
-      "Account",
+      "FinancialAccount",
       "Contact",
+      "Session",
+      "Account",
+      "VerificationToken",
       "User"
     RESTART IDENTITY CASCADE
   `);

@@ -87,7 +87,7 @@ describe('route A↔B integration (real DB + mocked OllamaLlmClient)', () => {
     const user = await prisma.user.create({
       data: { telegramUserId: ALLOWED_USER_ID, name: 'Integration User' },
     });
-    const account = await prisma.account.create({
+    const account = await prisma.financialAccount.create({
       data: { userId: user.id, name: 'Nubank', type: 'credit_card', closingDay: 15, dueDay: 22 },
     });
     const invoice = await prisma.invoice.create({
