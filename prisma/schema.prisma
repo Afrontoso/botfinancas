@@ -36,6 +36,12 @@ model User {
   image         String?
   authAccounts  Account[]
   sessions      Session[]
+
+  // Quando o User do Telegram é vinculado à conta web Google: aponta pro
+  // Account (NextAuth) que representa essa conexão. O Account em si fica
+  // num User Google distinto criado pelo NextAuth no primeiro login.
+  // Lookup do "usuário corrente do dashboard" é: session → Account → User Telegram.
+  linkedAccountId String?  @unique
 }
 
 /// Pessoas externas com quem o usuário divide despesas (ex: esposa, amigo).
