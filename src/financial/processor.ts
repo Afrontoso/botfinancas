@@ -7,10 +7,11 @@ import { findOrCreateCategory } from './categories';
 import { handleQuery } from './query-handler';
 import { payInvoice } from './invoice-payment';
 import { createRecurring } from './recurring-service';
+import { generateLinkCode } from './link-account';
 import { prisma } from '../lib/prisma';
 
 export type ProcessResult = {
-  type: 'created' | 'rejected' | 'query' | 'unknown';
+  type: 'created' | 'rejected' | 'query' | 'unknown' | 'link_code';
   transaction?: Transaction;
   reply: string;
 };
@@ -20,6 +21,20 @@ export async function processMessage(
   userId: string,
   llm: LlmClient,
 ): Promise<ProcessResult> {
+  // Comando explícito de vinculação Telegram ↔ web (S-9). Não passa pelo LLM.
+  const trimmed = message.trim().toLowerCase();
+  if (trimmed === '/vincular' || trimmed === 'vincular') {
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      return { type: 'unknown', reply: 'Não consegui identificar sua conta.' };
+    }
+    const code = await generateLinkCode(prisma, user.telegramUserId);
+    return {
+      type: 'link_code',
+      reply: `Seu código de vinculação é ${code}. Acesse o dashboard em /dashboard/link e informe esse código nos próximos 10 minutos.`,
+    };
+  }
+
   const intent = detectIntent(message);
 
   if (intent === 'query') {
