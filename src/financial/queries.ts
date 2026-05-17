@@ -73,6 +73,13 @@ export async function listRecent(
   });
 }
 
+export type TransactionsFilter = {
+  type?: TxType;
+  categoryId?: string;
+  from?: Date;
+  to?: Date;
+};
+
 export type PaginatedTransactionsFilter = {
   type?: TxType;
   categoryId?: string;
@@ -82,6 +89,23 @@ export type PaginatedTransactionsResult = {
   items: TransactionWithCategory[];
   total: number;
 };
+
+export async function listTransactionsForExport(
+  prisma: PrismaClient,
+  userId: string,
+  filter: TransactionsFilter = {},
+): Promise<TransactionWithCategory[]> {
+  return prisma.transaction.findMany({
+    where: {
+      userId,
+      ...(filter.type ? { type: filter.type } : {}),
+      ...(filter.categoryId ? { categoryId: filter.categoryId } : {}),
+      ...periodFilter(filter.from, filter.to),
+    },
+    orderBy: { transactionDate: 'desc' },
+    include: { category: true },
+  });
+}
 
 export async function listTransactionsPaginated(
   prisma: PrismaClient,
