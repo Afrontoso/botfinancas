@@ -30,7 +30,7 @@ describe('queries', () => {
     });
     transportCategoryId = transport.id;
 
-    // Seed transactions across May 2026
+    // Seed de transações ao longo de maio/2026
     await prisma.transaction.createMany({
       data: [
         {
@@ -68,7 +68,7 @@ describe('queries', () => {
           description: 'Salário',
           transactionDate: new Date('2026-05-05'),
         },
-        // April transaction (outside May period)
+        // transação de abril (fora do período de maio)
         {
           userId,
           categoryId: foodCategoryId,
@@ -142,7 +142,7 @@ describe('queries', () => {
       const result = await listTransactionsPaginated(prisma, userId, 0, 10);
       expect(result.total).toBe(5);
       expect(result.items).toHaveLength(5);
-      // ordered by transactionDate desc
+      // ordenado por transactionDate desc
       expect(result.items[0]?.description).toBe('Uber'); // 2026-05-10
     });
 

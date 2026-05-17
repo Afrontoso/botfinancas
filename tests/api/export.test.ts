@@ -43,7 +43,7 @@ describe('export endpoints', () => {
           description: 'Salário',
           transactionDate: new Date('2026-05-05'),
         },
-        // outside default date range
+        // fora do range padrão de datas (abril, não maio)
         {
           userId,
           categoryId: foodCategoryId,
@@ -53,7 +53,7 @@ describe('export endpoints', () => {
           description: 'Mercado abril',
           transactionDate: new Date('2026-04-15'),
         },
-        // belongs to another user — must never appear
+        // pertence a outro usuário — nunca deve aparecer no export
         {
           userId: otherUserId,
           type: 'expense',
@@ -127,7 +127,7 @@ describe('export endpoints', () => {
       const onlyExpense = await pdfGet(new Request('http://test/api/export/pdf?type=expense'));
       const allBuf = Buffer.from(await all.arrayBuffer());
       const expBuf = Buffer.from(await onlyExpense.arrayBuffer());
-      // both are valid PDFs
+      // ambos são PDFs válidos
       expect(allBuf.slice(0, 4).toString('ascii')).toBe('%PDF');
       expect(expBuf.slice(0, 4).toString('ascii')).toBe('%PDF');
     });

@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    // pdfkit reads its AFM font files via fs.readFileSync at runtime; bundling
-    // via webpack strips those data files. Externalizing keeps the require call
-    // pointing at node_modules where the AFMs live.
+    // pdfkit lê os arquivos .afm de fonte via fs.readFileSync em runtime; quando
+    // o webpack bundla, esses arquivos somem e quebra com ENOENT. Externalizar
+    // mantém o require apontando pro node_modules onde os .afm de fato existem.
     serverComponentsExternalPackages: ['pdfkit'],
   },
 };
