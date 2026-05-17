@@ -46,3 +46,41 @@ export async function sendReminder(
   await sendFn(user.telegramUserId, text);
   await markSent(prisma, reminder.id);
 }
+
+export type ProcessReminderResult = {
+  sent: number;
+  failed: number;
+  errors: { reminderId: string; message: string }[];
+};
+
+/**
+ * Processa TODOS os reminders pendentes vencidos: para cada um, busca o user,
+ * envia via sendFn e marca enviado. Falhas individuais não interrompem o loop —
+ * o reminder fica pending pra próxima rodada do cron.
+ */
+export async function processDueReminders(
+  prisma: PrismaClient,
+  sendFn: SendMessageFn,
+  now: Date,
+): Promise<ProcessReminderResult> {
+  const due = await prisma.reminder.findMany({
+    where: { status: 'pending', scheduledFor: { lte: now } },
+    include: { user: true },
+    orderBy: { scheduledFor: 'asc' },
+  });
+
+  const result: ProcessReminderResult = { sent: 0, failed: 0, errors: [] };
+  for (const r of due) {
+    try {
+      await sendReminder(prisma, sendFn, r, r.user);
+      result.sent += 1;
+    } catch (err) {
+      result.failed += 1;
+      result.errors.push({
+        reminderId: r.id,
+        message: err instanceof Error ? err.message : String(err),
+      });
+    }
+  }
+  return result;
+}

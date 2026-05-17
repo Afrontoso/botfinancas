@@ -1,7 +1,11 @@
 /// <reference types="vitest/globals" />
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { prisma } from '../setup';
-import { sendReminder, formatReminderMessage } from '../../src/financial/reminder-sender';
+import {
+  sendReminder,
+  formatReminderMessage,
+  processDueReminders,
+} from '../../src/financial/reminder-sender';
 import type { Reminder, User } from '@prisma/client';
 
 describe('reminder-sender', () => {
@@ -75,6 +79,47 @@ describe('reminder-sender', () => {
       const stillPending = await prisma.reminder.findUnique({ where: { id: reminder.id } });
       expect(stillPending?.status).toBe('pending');
       expect(stillPending?.sentAt).toBeNull();
+    });
+  });
+
+  describe('processDueReminders', () => {
+    it('envia todos os pendentes vencidos e marca como enviado', async () => {
+      await makeReminder({ scheduledFor: new Date('2026-05-10T00:00:00Z') });
+      await makeReminder({ scheduledFor: new Date('2026-05-15T00:00:00Z') });
+      // ainda não venceu
+      const future = await makeReminder({ scheduledFor: new Date('2026-06-01T00:00:00Z') });
+
+      const send = vi.fn().mockResolvedValue(undefined);
+      const result = await processDueReminders(prisma, send, new Date('2026-05-17T00:00:00Z'));
+
+      expect(result.sent).toBe(2);
+      expect(result.failed).toBe(0);
+      expect(send).toHaveBeenCalledTimes(2);
+
+      const futureStill = await prisma.reminder.findUnique({ where: { id: future.id } });
+      expect(futureStill?.status).toBe('pending');
+    });
+
+    it('contabiliza falhas individuais sem interromper o loop', async () => {
+      const r1 = await makeReminder({ scheduledFor: new Date('2026-05-10T00:00:00Z') });
+      const r2 = await makeReminder({ scheduledFor: new Date('2026-05-11T00:00:00Z') });
+
+      const send = vi
+        .fn()
+        .mockResolvedValueOnce(undefined)
+        .mockRejectedValueOnce(new Error('boom'));
+      const result = await processDueReminders(prisma, send, new Date('2026-05-17T00:00:00Z'));
+
+      expect(result.sent).toBe(1);
+      expect(result.failed).toBe(1);
+      expect(result.errors[0]?.message).toBe('boom');
+
+      // o que falhou continua pending
+      const after1 = await prisma.reminder.findUnique({ where: { id: r1.id } });
+      const after2 = await prisma.reminder.findUnique({ where: { id: r2.id } });
+      // ordenamos por scheduledFor asc, então r1 é enviado primeiro (resolve), r2 falha
+      expect(after1?.status).toBe('sent');
+      expect(after2?.status).toBe('pending');
     });
   });
 });
