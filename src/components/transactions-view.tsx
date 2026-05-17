@@ -3,6 +3,7 @@ import type { ReactElement } from 'react';
 import type { TransactionWithCategory } from '../financial/queries';
 import { PageHeader } from './ui/page-header';
 import { formatBRL } from './ui/format';
+import { ExportButtons } from './export-buttons';
 
 export type TransactionsViewProps = {
   items: TransactionWithCategory[];
@@ -25,10 +26,13 @@ export function TransactionsView({
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        title="Transações"
-        subtitle={`${total} registro${total === 1 ? '' : 's'} · página ${page} de ${totalPages}`}
-      />
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <PageHeader
+          title="Transações"
+          subtitle={`${total} registro${total === 1 ? '' : 's'} · página ${page} de ${totalPages}`}
+        />
+        <ExportButtons filter={filter} />
+      </div>
 
       <form
         method="get"
