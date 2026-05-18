@@ -7,15 +7,20 @@ import expenseWithCard from '../../shared/fixtures/expense_with_card.json';
 
 const llmQueue = vi.hoisted(() => [] as string[]);
 
-vi.mock('../../src/ai/llm-client', () => ({
-  OllamaLlmClient: class {
+vi.mock('../../src/ai/llm-client', () => {
+  class FakeLlm {
     async complete(_prompt: string): Promise<string> {
       const next = llmQueue.shift();
       if (next === undefined) throw new Error('LLM queue exhausted in test');
       return next;
     }
-  },
-}));
+  }
+  return {
+    OllamaLlmClient: FakeLlm,
+    GeminiLlmClient: FakeLlm,
+    makeLlmClient: () => new FakeLlm(),
+  };
+});
 
 import { POST } from '../../src/app/api/webhooks/telegram/route';
 

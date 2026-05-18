@@ -5,7 +5,7 @@ import { TelegramUpdateSchema } from '../../../../webhook/telegram-payload';
 import { normalizeTelegramUpdate } from '../../../../webhook/normalize';
 import { sendMessage } from '../../../../webhook/reply';
 import { processMessage } from '../../../../financial/processor';
-import { OllamaLlmClient } from '../../../../ai/llm-client';
+import { makeLlmClient } from '../../../../ai/llm-client';
 
 export async function POST(request: Request): Promise<Response> {
   const authResult = validateTelegramSecret(request);
@@ -75,10 +75,7 @@ export async function POST(request: Request): Promise<Response> {
 
   let result: { reply: string };
   try {
-    const llm = new OllamaLlmClient(
-      process.env['OLLAMA_BASE_URL'] ?? 'http://localhost:11434',
-      process.env['OLLAMA_TEXT_MODEL'] ?? 'llama3.1',
-    );
+    const llm = makeLlmClient();
     result = await processMessage(normalized.normalizedText ?? '', user.id, llm);
   } catch (err) {
     logger.error({ err, messageLogId: messageLog.id }, 'processMessage threw');

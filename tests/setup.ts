@@ -10,6 +10,12 @@ beforeAll(() => {
   execSync('pnpm prisma migrate deploy', {
     env: { ...process.env, DATABASE_URL: process.env['TEST_DATABASE_URL'] },
   });
+  // makeLlmClient() lança se nada estiver configurado. Testes que importam o
+  // webhook handler precisam de uma chave qualquer pra construir o cliente —
+  // o complete() em si é sempre mockado via fetch ou via processMessage stub.
+  if (!process.env['GEMINI_API_KEY'] && !process.env['OLLAMA_BASE_URL']) {
+    process.env['GEMINI_API_KEY'] = 'test-stub-key';
+  }
 });
 
 beforeEach(async () => {
